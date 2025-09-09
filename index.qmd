@@ -22,8 +22,8 @@ editor:
 
 ## Introduction
 
-1.  **Bayesian Hierarchical Model (**Disease reclassification and
-    prediction)
+1.  **Bayesian Hierarchical Model (Disease reclassification and
+    prediction)**
 
 **What is the goal of the paper?**
 
