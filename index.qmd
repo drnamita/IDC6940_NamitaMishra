@@ -84,6 +84,8 @@ Models were entirely parametric, and extensions to nonparametric or more
 flexible parametric models were recommended to improve approaches for
 neuroimage or genomic data.
 
+neuroimage or genomic data.
+
 Applications:
 
 -   to scale a tool that addresses a particular unmet need across a
@@ -94,7 +96,7 @@ Applications:
 -   embed a collection of tools to acquire and use the most relevant
     information, agnostic to its level of measurement, to improve
     population and individual health decisions that cause better
-    outcomes at more affordable costs. \@Zeger2020
+    outcomes at more affordable costs. @Zeger2020
 
 2.  **Bayesian Inference (parametric vs non-parametric)**
 
