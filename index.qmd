@@ -94,10 +94,7 @@ Applications:
 -   embed a collection of tools to acquire and use the most relevant
     information, agnostic to its level of measurement, to improve
     population and individual health decisions that cause better
-    outcomes at more affordable costs.
-    
-
-@Zeger2020
+    outcomes at more affordable costs. \@Zeger2020
 
 2.  **Bayesian Inference (parametric vs non-parametric)**
 
@@ -377,7 +374,7 @@ the two.
 
 To yield the posterior density that reflects the updated knowledge about
 the model parameters after having observed the data, the steps to
-Bayesian linear regression steps are mentioned  -
+Bayesian linear regression steps are mentioned -
 
 \(1\) To calculate the probability density function for the data given
 the unknown model parameters;
