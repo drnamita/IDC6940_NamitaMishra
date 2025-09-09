@@ -27,7 +27,7 @@ editor:
 
 **What is the goal of the paper?**
 
-The authors develop a Bayesian hierarchical model for multivariate
+The authors aimed to develop a Bayesian hierarchical model for multivariate
 longitudinal data to predict health status, trajectories, and
 intervention effects at the individual level in the PCORI mission to
 address questions about health status from patients and clinicians.
