@@ -44,7 +44,7 @@ characteristics of posterior distributions can be immediately understood
 by clinicians and patients as relevant to their decision. Combining
 prior knowledge and patient data with evidence could predict the
 patient’s health status, trajectory, and/or likely benefits of
-interventions.
+intervention.
 
 **How is it solved?**
 
