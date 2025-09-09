@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Logistc Regression Application in Disease Prediction"
+title: "Bayesian Logistic Regression Application in Disease Prediction"
 subtitle: "CapStone Project_2025"
 author: "Namita Mishra (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
