@@ -442,8 +442,8 @@ correlated. @DeLeeuw2012a
     interactions between age, gender, metabolic score and other risk
     factors should be included. • The use of enhanced model should be
     validated through external validation by applying the proposed
-    models to new subjects not included in the training the parameters
-    of model. @Liu2013
+    models to new subjects not included in the training of the model
+    parameters. @Liu2013
 
 ## Methods
 
