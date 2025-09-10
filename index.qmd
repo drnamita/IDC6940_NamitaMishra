@@ -16,11 +16,11 @@ execute:
 editor: 
   markdown: 
     wrap: 72
----
 
+---
 ## Namita's
 
-## Introduction Lit
+## Introduction Literature NOW
 
 1.  **Bayesian Hierarchical Model (Disease reclassification and
     prediction)**
