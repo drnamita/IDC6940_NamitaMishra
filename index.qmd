@@ -20,7 +20,7 @@ editor:
 
 ## Namita's
 
-## Introduction Literature
+## Introduction Lit
 
 1.  **Bayesian Hierarchical Model (Disease reclassification and
     prediction)**
