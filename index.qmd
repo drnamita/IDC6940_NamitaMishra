@@ -602,6 +602,8 @@ $$
 
 
 ```{r}
+#| label: Libraries
+#| include: false
 
 
 # loading packages 
@@ -625,10 +627,7 @@ install.packages("nhanesA")
 ```
 
 
-## Analysis and Results
-
-### Data Exploration and Visualization
-
+## Analysis and Results: Data Exploration and Visualization
 
 -   Describe your data sources and collection process.
 
@@ -638,8 +637,6 @@ NHANES 2-year cross-sectional data, all variables are measured at the same visit
 Data Management 
 
 Df (download) -> select variables -> merging df -> created combined df for analysis -> coded missing and special codes -> categorzing variables
-
-
 
 Categorization and Creation of new variable
 
@@ -705,7 +702,9 @@ o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
 
 This final dataset is interpretable, with good statistical power, and with proper handling of missing values within the data and within each variable.
 
-```{r, warning=FALSE, echo=T, message=FALSE}
+```{r message=FALSE, warning=FALSE}
+#| label: nhanes tables
+#| include: false
 
 
 
@@ -736,9 +735,11 @@ Variable Selection and merging of the subsets
 
 Subset were created from each df, all NAs were observed in each subset with selected variables and summed before merging the subsets, in each column and sum of NAs in all columns. 
 
-Merging of variables into a merged df
+Merging of all variables from different datasets into a merged df for analysis
 
-```{r, warning=FALSE, echo=T, message=FALSE}
+```{r message=FALSE, warning=FALSE}
+#| label: merger dataframe
+#| include: false
 
                 
     # Variable of Interest from datasets (5) to create subsets of each dataset
@@ -780,15 +781,15 @@ Merging of variables into a merged df
                          select(SEQN , DSD010) 
                        
               
-          # to know missing in all 
+          # Check for missing in all subsets
                        
-                       demo_subset
-                       lab_subset
-                       mcq_subset
-                       cdq_subset
-                       smq_subset
-                       bmx_subset
-                       dsqtot_subset
+                       #demo_subset
+                       #lab_subset
+                       #mcq_subset
+                       #cdq_subset
+                       #smq_subset
+                       #bmx_subset
+                       #dsqtot_subset
                        
           # all NAs were summed before merging the subsets
                        
@@ -817,10 +818,10 @@ Merging of variables into a merged df
                        sum(is.na(smq_subset$SEQN))
                        sum(is.na(bmx_subset$SEQN))
                            
-   # merging without cleaning  
+   # merging varaibles without cleaning  
                        
                        
-  ## merged dataframe
+  ## Created merged dataframe
                        
                        merged_data_1 <- demo_subset %>%
                          left_join(smq_subset,   by = "SEQN") %>%
@@ -839,7 +840,7 @@ Merging of variables into a merged df
                       sum(complete.cases(merged_data_1))
                        nrow(merged_data_1)
                        ncol(merged_data_1)
-                       names(merged_data_1)
+                       #names(merged_data_1)
 
 
 ```
@@ -863,7 +864,10 @@ Exclusions
 •	Participants with missing in smoking_cat were added under “Never” to preserve the row numbers. 
 •	CDQ009F (Pain in left chest) column, with a high % of missingness, was excluded to avoid overlap with the CVD response.
 
-```{r, warning=FALSE, echo=T, message=FALSE}
+Names of the selected variables.
+
+```{r message=FALSE, warning=FALSE}
+#| label: missing final dataset
 
      # handling special codes
                                          
@@ -899,15 +903,15 @@ Exclusions
                        
   # summary and structure of the final data frame after managing special codes
                        
-                       summary(merged_data_1[, vars_to_clean])
-                       str(merged_data_1)
-                       summary(merged_data_1)
+                       #summary(merged_data_1[, vars_to_clean])
+                       #str(merged_data_1)
+                       #summary(merged_data_1)
                        
                        
 # Exclude CDQ009F (chest pain) since it overlaps with CVD outcome and >70% missing values
                        
                        merged_data_1$CDQ009F <- NULL
-                       summary(merged_data_1)
+                       #summary(merged_data_1)
 
 
 ```
@@ -976,6 +980,8 @@ Other Race - Including Multi-Racial
 o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
 
 ```{r}
+#| label: new columns
+#| include: false
  
   # Create New column: CVD (Response Variable) 
   
@@ -1024,14 +1030,11 @@ o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
 
 -   Present initial findings and insights through visualizations.
 
-
-    Summary statistics, histogram (continuous variables), and bar plot (categorical variables) were observed before          regression analysis
-
-
--   Unexpected patterns or anomalies.
+Summary statistics, histogram (continuous variables), and bar plot (categorical variables) were observed before regression analysis
 
 
 ```{r echo=T, message=FALSE, warning=FALSE}
+#| label: tables
 
 
 table(merged_data_1$age_cat, useNA = "ifany")    # Check table distribution
@@ -1074,10 +1077,16 @@ hist(merged_data_1$LBDTCSI)
 ```
 
 
+Unexpected reports, patterns or anomalies.
 
-
-
-
+- The age showed a skewed histogram. Most population were from <20years range followed by 40-59years range   with mean age being 26 years
+- Smoking age when first started regularly shows a higher number in < 20 years range
+- lab report on total cholesterol had a mean of 4.53 (mmol/L) with max being 21 (mmol/L)
+- Non-Hispanic White were majority in the study cohort.
+- Majority reported normal weight but followed by higher number of obese population.
+- Female: Male population reported a higher side on females.
+- Majority reported never started smoking followed by the age of starting smoking regularly in the range    of early age (<18 years) category. 
+- Total number of population being told having CVD (stroke, coronary disease, heart attack, infarction)     reported "NO"
 
 
 ```{python}
@@ -1101,20 +1110,9 @@ import pandas as pd
 
 
 ```{r, warning=FALSE, echo=TRUE}
-# Load Data
 
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
 
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_bw()
+
   
 
 ```
