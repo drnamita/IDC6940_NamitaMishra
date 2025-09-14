@@ -572,12 +572,7 @@ points. The estimation formula is printed below [@R-base]:*
 
 Methodology
 
-Data Source
-
-NHANES 2-year cross-sectional data, all variables are measured at the same visit for in 5 datasets  (demographics, labs, exam, diet, questionnaire) to classify current CVD status, using Bayesian logistic GLM.
-
 Staistical software used is R and packages were installed> We used libraries in R to run the analysis. The .xpt files were converted to df using haven package that reads .XPT files.
-
 
 Statistical Method Used: 
 
@@ -594,32 +589,57 @@ b.	Weakly informative priors (Normal 0,1) - shrink extreme estimates,  preventin
 5.	For an easy update, a new NHANES cycle can update the calculated posterior rather than refitting from scratch, developing a live risk model.
 
 
+$$
+M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
+$$$W_n(x)$ *is the sum of weights that belongs to all real numbers.
+Weights are positive numbers and small if* $X_i$ *is far from* $x$*.*
+
+*Another equation:*
+
+$$
+y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
+$$
+
+
+```{r}
+
+
+# loading packages 
+
+library(tidyverse)
+library(knitr)
+library(ggthemes)
+library(ggrepel)
+library(dslabs)
+library(Hmisc)
+library(dplyr)
+library(tidyr)
+library(forcats)
+library(ggplot2)
+library ("nhanesA")                 
+
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+install.packages("nhanesA")
+
+```
+
+
+## Analysis and Results
+
+### Data Exploration and Visualization
+
+
+-   Describe your data sources and collection process.
+
+Data Source
+
+NHANES 2-year cross-sectional data, all variables are measured at the same visit for in 5 datasets  (demographics, labs, exam, diet, questionnaire) to classify current CVD status, using Bayesian logistic GLM.
 Data Management 
 
 Df (download) -> select variables -> merging df -> created combined df for analysis -> coded missing and special codes -> categorzing variables
 
-Data Preparation 
 
-Variable Selection and merging of the subsets
-
-Subset were created from each df, all NAs were observed in each subset with selected variables and summed before merging the subsets, in each column and sum of NAs in all columns. 
-
-Exclusions
-
-•	Participants missing CVD response in all MCQ160 series were merged into NO.
-•	Participants with missing in smoking_cat were added under “Never” to preserve the row numbers. 
-•	CDQ009F (Pain in left chest) column, with a high % of missingness, was excluded to avoid overlap with the CVD response.
-
-Data Cleaning
-
-•	Silently dropping cases = throwing out any rows with missing values (aka complete-case analysis). Loosing sample size (power) can introduce bias if the missingness isn’t completely random. In the dataset, the missing values (NA) are kept as NA, and we used complete-case analysis (or “listwise deletion”) criteria as regression with glm(), R will automatically drop any row with NA in the model variables. It was the simplest approach to handle missingness, and we aware of losing sample size and introducing bias if missingness is informative.
-
-•	NHANES special codes (as below) were transformed to NAs, preserving the number of rows intact, considering special codes are not random and cannot be dropped. 
-Type	Codes / Values	Meaning
-Refused	7, 77, 777, 7777	Participant refused to answer
-Don’t know / Unknown	9, 99, 999, 9999	Participant didn’t know or unknown
-Not applicable / skipped	8, 88, 888, 8888	Variable not applicable or skipped
-Other	0	Sometimes “No” depending on variable (check codebook)
 
 Categorization and Creation of new variable
 
@@ -685,63 +705,9 @@ o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
 
 This final dataset is interpretable, with good statistical power, and with proper handling of missing values within the data and within each variable.
 
-Results
-
-Summary statistics, histogram (continuous variables), and bar plot (categorical variables) were observed before regression analysis.
- 
-
-
-    
-
-
-$$
-M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
-$$$W_n(x)$ *is the sum of weights that belongs to all real numbers.
-Weights are positive numbers and small if* $X_i$ *is far from* $x$*.*
-
-*Another equation:*
-
-$$
-y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
-$$
-
-## Analysis and Results
-
-
-
-
-
-
-
-### Data Exploration and Visualization
-
--   Describe your data sources and collection process.
-
--   Present initial findings and insights through visualizations.
-
--   Highlight unexpected patterns or anomalies.
-
-A study was conducted to determine how...
-
 ```{r, warning=FALSE, echo=T, message=FALSE}
 
-# loading packages 
 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
-library(dslabs)
-library(Hmisc)
-library(dplyr)
-library(tidyr)
-library(forcats)
-library(ggplot2)
-library ("nhanesA")                 
-
-options(repos = c(CRAN = "https://cloud.r-project.org"))
-
-install.packages("nhanesA")
 
  # making subsets for each dataset  
                        
@@ -762,7 +728,19 @@ install.packages("nhanesA")
                        smq_h <- nhanes("SMQ_H")            #Quest
                        demo_h <- nhanes("DEMO_H")         #Demo
                        
-                   
+```
+
+Data Preparation 
+
+Variable Selection and merging of the subsets
+
+Subset were created from each df, all NAs were observed in each subset with selected variables and summed before merging the subsets, in each column and sum of NAs in all columns. 
+
+Merging of variables into a merged df
+
+```{r, warning=FALSE, echo=T, message=FALSE}
+
+                
     # Variable of Interest from datasets (5) to create subsets of each dataset
     # variables total (14)
                        
@@ -812,7 +790,6 @@ install.packages("nhanesA")
                        bmx_subset
                        dsqtot_subset
                        
-                       
           # all NAs were summed before merging the subsets
                        
                        sum(is.na(demo_subset))
@@ -840,7 +817,9 @@ install.packages("nhanesA")
                        sum(is.na(smq_subset$SEQN))
                        sum(is.na(bmx_subset$SEQN))
                            
-   # merging without cleaning    
+   # merging without cleaning  
+                       
+                       
   ## merged dataframe
                        
                        merged_data_1 <- demo_subset %>%
@@ -861,7 +840,31 @@ install.packages("nhanesA")
                        nrow(merged_data_1)
                        ncol(merged_data_1)
                        names(merged_data_1)
-                       
+
+
+```
+
+
+Data Cleaning
+
+•	Silently dropping cases = throwing out any rows with missing values (aka complete-case analysis). Loosing sample size (power) can introduce bias if the missingness isn’t completely random. In the dataset, the missing values (NA) are kept as NA, and we used complete-case analysis (or “listwise deletion”) criteria as regression with glm(), R will automatically drop any row with NA in the model variables. It was the simplest approach to handle missingness, and we aware of losing sample size and introducing bias if missingness is informative.
+
+•	NHANES special codes (as below) were transformed to NAs, preserving the number of rows intact, considering special codes are not random and cannot be dropped. 
+Type	Codes / Values	Meaning
+Refused	7, 77, 777, 7777	Participant refused to answer
+Don’t know / Unknown	9, 99, 999, 9999	Participant didn’t know or unknown
+Not applicable / skipped	8, 88, 888, 8888	Variable not applicable or skipped
+Other	0	Sometimes “No” depending on variable (check codebook)
+
+
+Exclusions 
+
+•	Participants missing CVD response in all MCQ160 series were merged into NO.
+•	Participants with missing in smoking_cat were added under “Never” to preserve the row numbers. 
+•	CDQ009F (Pain in left chest) column, with a high % of missingness, was excluded to avoid overlap with the CVD response.
+
+```{r, warning=FALSE, echo=T, message=FALSE}
+
      # handling special codes
                                          
       special_codes <- c(7, 9, 77, 99)
@@ -885,7 +888,6 @@ install.packages("nhanesA")
                        
   # Replace special codes with NA
                        
-                       
                        for (v in vars_to_clean) {
                          merged_data_1[[v]][merged_data_1[[v]] %in% special_codes] <- NA
                        }
@@ -902,13 +904,79 @@ install.packages("nhanesA")
                        summary(merged_data_1)
                        
                        
-                       
-                       
 # Exclude CDQ009F (chest pain) since it overlaps with CVD outcome and >70% missing values
                        
                        merged_data_1$CDQ009F <- NULL
                        summary(merged_data_1)
-              
+
+
+```
+
+
+Creating new variables and categorization
+
+
+1. Outcome Variable
+
+CVD
+•	Composite cardiovascular disease outcome (CVD) derived by combining MCQ series("MCQ160B",  "MCQ160C" , "MCQ160D" ,"MCQ160E" ,"MCQ160F").
+• In CVD, the data was transformed the original values (Yes or no) into a new set of numeric codes:
+•	“Yes” → 1
+•	“No” → 0
+•	Missing → NA
+
+2. Predictors
+
+Smoking Variable (SMQ030) categorization
+
+•	The numeric variable in the original dataset (SMQ030- Age started smoking regularly (in years) was transformed to categorical variable with 3 levels
+•	Derived categorical variable (smoking_cat):
+o	Never smoker: SMQ030 = NA
+o	Early starter: SMQ030 ≤ 18 years
+o	Late starter: SMQ030 > 18 years
+We found it rationale as participants who never smoked do not report an age (Never smokers), further categorization into early vs. late starters allows assessment of age at initiation as a risk factor. Smoking categories are included in the logistic regression model, with “Never smoker” as the reference group.
+
+Body Mass Index (BMI) 
+
+•	The original variable: BMDBMIC (measured BMI) in the data is a categorized variable (BMI_cat) based on percentiles and has 4 levels:	
+o	Underweight (<5th percentile)	
+o	Normal (5th–<85th)	
+o	Overweight (85th–<95th)	
+o	Obese (≥95th percentile)	
+o	Missing	
+We kept it as it is as categorization provides clinically interpretable groups.
+
+Age categorization
+age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
+
+Final Analytic Dataset (Response and Predictor variables)
+•	Outcome: CVD (binary)
+
+•	Predictors:
+o	SEQN  num   
+o	CVD     binary (1 = any “Yes”, 0 = all “No”, NA if all missing).
+o	smoking_cat 	(factor, 3 levels)
+Never (no and missing, assuming they never started)
+Early (<=18 years) 
+Late (>18 years) 
+o	BMI_cat (factor, 4 levels): 
+Underweight 
+Normal 
+Overweight 
+Obese 
+
+•	Co-variates: 
+o	Gender	 (factor, 2 levels): Male : Female 
+o	Ethnicity (factor, (5 levels)
+Mexican American
+Non-Hispanic White 
+Non-Hispanic Black
+Other Hispanic                   
+Other Race - Including Multi-Racial 
+o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
+
+```{r}
+ 
   # Create New column: CVD (Response Variable) 
   
        # Combine MCQ160 (B,C,D,E,F) series into a binary CVD variable
@@ -918,8 +986,7 @@ install.packages("nhanesA")
             merged_data_1[cols] <- lapply(merged_data_1[cols], function(x) {
            ifelse(x == "Yes", 1, ifelse(x == "No", 0, NA))
             })
-
-            
+         
             
             merged_data_1$CVD <- ifelse(rowSums(merged_data_1[, cols] == 1, na.rm = TRUE) > 0, 1,
                             ifelse(rowSums(!is.na(merged_data_1[, cols])) == 0, NA, 0))
@@ -944,8 +1011,6 @@ install.packages("nhanesA")
 
           table(merged_data_1$smoking_cat, useNA = "ifany")   # Check counts
 
-
-
 # Created Age Category grouped
 
         merged_data_1$age_cat <- cut(
@@ -954,6 +1019,20 @@ install.packages("nhanesA")
         labels = c("<20", "20-39", "40-59", "60+"),
         right = TRUE                         
           )
+
+```
+
+-   Present initial findings and insights through visualizations.
+
+
+    Summary statistics, histogram (continuous variables), and bar plot (categorical variables) were observed before          regression analysis
+
+
+-   Unexpected patterns or anomalies.
+
+
+```{r echo=T, message=FALSE, warning=FALSE}
+
 
 table(merged_data_1$age_cat, useNA = "ifany")    # Check table distribution
 
@@ -968,7 +1047,6 @@ table(merged_data_1$RIDRETH1)
 
 
 # bar plot for categorical and histo for continuous variable
-
 
 plot_bar <- function(df, var) {
   ggplot(df, aes_string(x = var)) +
@@ -993,9 +1071,14 @@ hist(merged_data_1$RIDAGEYR)
 hist(merged_data_1$SMD030)
 hist(merged_data_1$LBDTCSI)
 
-
-
 ```
+
+
+
+
+
+
+
 
 ```{python}
 import pandas as pd
