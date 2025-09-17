@@ -658,9 +658,7 @@ The subsets were then merged to an analytic dataframe, cleaned, categorized, and
 The merged dataframe was then explored for basic statistics and any anamolies and patters before running regression analysis.
 
 To have a final dataset is ready for interpretation, has good statistical
-power. the descriotives of and proper handling of missing values was conducted. Final Analytic
-dataset included binary response variable (Diabetes), predictor variables
-(BMI), and covariates (age, gender, and race). Multiple
+power. the descriotives of and proper handling of missing values was conducted. Final Analytic dataset included binary response variable (Diabetes), predictor variables (BMI), and covariates (age, gender, and race). Multiple
 linear regression is performed and to handle complete-case deletion issues (liswise deletion) the quasi-complete data was handled by Baysian data augmentatio before running Bayesian logistic regression. 
 
 
@@ -769,21 +767,10 @@ Participant didn’t know or unknown Not applicable / skipped 8, 88, 888,
 8888 Variable not applicable or skipped Other 0 Sometimes “No” depending
 on variable (check codebook)
 
-Exclusions
-
-• Participants missing CVD response in all MCQ160 series were merged
-into NO. • Participants with missing in smoking_cat were added under
-“Never” to preserve the row numbers. • CDQ009F (Pain in left chest)
-column, with a high % of missingness, was excluded to avoid overlap with
-the CVD response.
-
-Names of the selected variables.
 
 ```{r message=FALSE, warning=FALSE}
 #| label: missing values_final data
 #| include: false
-
-
 
 
 sum(is.na(merged_data$DIQ240))   # number of missing in DIQ240
@@ -791,7 +778,6 @@ sum(is.na(merged_data$RIDAGEYR)) # number of missing in RIDAGEYR
 sum(is.na(merged_data$BMDBMIC)) # number of missing in RIDAGEYR
 sum(is.na(merged_data$RIAGENDR)) # number of missing in RIDAGEYR
 sum(is.na(merged_data$SEQN)) # number of missing in RIDAGEYR
-
 
 
 # Count NAs in all columns
@@ -807,7 +793,6 @@ sum(merged_data$SEQN  %in% missing_codes)
 
 
 merged_data # 9813 obs with 9 variables 
-
 
 # cleaning merged_data (# remove NAs)
 
@@ -840,46 +825,10 @@ Creating new variables and categorization
 
 1.  Response Variable
 
-    CVD - Composite cardiovascular disease outcome (CVD- binary) is
-    derived by combining MCQ series("MCQ160B", "MCQ160C" ,
-    "MCQ160D","MCQ160E","MCQ160F"•
-
-    -   Ever told had congestive heart failure MCQ160B
-
-    -   Ever told you had coronary heart disease MCQ160C
-
-    -   Ever told you had angina/angina pectoris MCQ160D
-
-    -   Ever told you had heart attack MCQ160E
-
-    -   Ever told you had a stroke MCQ160F
-
-        The variable CVD, was transformed from the original values (Yes
-        or no) and recoded into numeric and binary (1 = any “Yes”, 0 =
-        all “No”, NA if all missing).
-
+    Diabetes - defined as "Is there one Dr you see for diabetes"
     Predictor Variables
 
-    -   Smoking Variable (SMQ030) was categorized from numeric format in
-        the original dataset (SMQ030) to categories based on the age (in
-        years) of starting smoking regularly. The variable has 3 levels
-        (smoking_cat):
-
-        -   Never smoker: SMQ030 = NA
-
-        -   Early starter: SMQ030 ≤ 18 years
-
-        -   Late starter: SMQ030 \> 18 years
-
-            We found it rationale to have missing under NAs, as
-            participants who never smoked do not report an age (Never
-            Smokers), and those who smoked were further categorized into
-            early vs. late starters based on age considering that it
-            allows better assessment of age at initiation as a risk
-            factor and can be included in logistic regression model,
-            with “Never smoker” as the reference group.
-
-    -   Body Mass Index (BMI)
+      -   Body Mass Index (BMI)
 
         The original data has BMDBMIC (measured BMI) as categorical and
         had no missing values. It (BMI_cat) has the following 4 levels:\
@@ -895,17 +844,13 @@ Creating new variables and categorization
     -   Ethnicity (factor, 5 levels): Mexican American, Non-Hispanic,
         White Non-Hispanic, Black Other Hispanic\
         Other Race - Including Multi-Racial
-    -   age_cat (factor, 4 levels): \<20, 21-39, 40-59, 60+
+
 
 ```{r}
 #| label: new columns
 #| include: false
  
-  
-
  # After listwise deletion of NAs, the clean_data - not usable data #)
-
-
 
 # cleaning of special characters(7,9,77,99) from merged_data (Raw data)
 
@@ -921,7 +866,6 @@ for (v in cols_to_clean) {
 
 summary(merged_data)  ## no removal of NAs in merged_data 
                       # NAs are handled in the model 
-
 
 
 table (merged_data$BMDBMIC)
@@ -942,8 +886,6 @@ m1<- glm(DIQ240 ~ BMDBMIC + RIDAGEYR + RIAGENDR + RIDRETH1,
 # planning for Bayesian data augmentation
 
 # MCMC =  samples from the joint posterior (both regression coefficients and the missing values).
-
-
 
 ```
 
@@ -993,21 +935,13 @@ colSums(is.na(Imputed_data1))  # check total missing values
 Unexpected reports, patterns or anomalies.
 
 -   The age showed a skewed histogram. Most population were from
-    \<20years range followed by 40-59years range with mean age being 26
+    <20years range followed by 40-59years range with mean age being 26
     years
--   Smoking age when first started regularly shows a higher number in \<
-    20 years range
--   lab report on total cholesterol had a mean of 4.53 (mmol/L) with max
-    being 21 (mmol/L)
 -   Non-Hispanic White were majority in the study cohort.
 -   Majority reported normal weight but followed by higher number of
     obese population.
 -   Female: Male population reported a higher side on females.
--   Majority reported never started smoking followed by the age of
-    starting smoking regularly in the range of early age (\<18 years)
-    category.
--   Total number of population being told having CVD (stroke, coronary
-    disease, heart attack, infarction) reported "NO"
+-   Total number of population being told having Diabetes reported "NO"
 
 ```{python}
 import pandas as pd
