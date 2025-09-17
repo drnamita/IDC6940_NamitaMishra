@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Logistic Regression Application in Disease Prediction"
+title: "Bayesian Logistic Regression Application in Diabetes Probability Prediction"
 subtitle: "CapStone Project_2025"
 author: "Namita Mishra (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
@@ -18,7 +18,7 @@ editor:
     wrap: 72
 ---
 
-## Namita's Literature review
+## Literature Review
 
 ## Introduction
 
@@ -29,7 +29,7 @@ editor:
 
 The authors aimed to develop a Bayesian hierarchical model for
 multivariate longitudinal data to predict health status, trajectories,
-and intervention effects at the individual level in the PCORI mission to
+and intervention effects at the individual level in PCORI mission to
 address questions about health status from patients and clinicians.
 
 **Why is it important?**
@@ -56,7 +56,7 @@ factors and endogenous (eg, current treatment) variables on the
 individual’s multivariate health measurements and the effects of health
 measurements at one time on subsequent interventions.
 
-The model provided estimate of the posterior distribution for each
+The model provided an estimate of the posterior distribution for each
 predictor variable and an estimate of the marginal distribution of the
 regression coefficients for each coefficient that measures the outcome
 (health status). In a larger sample, the likelihood dominates the prior
@@ -71,7 +71,7 @@ distributions, avoided missing data and complex outcome measurements.
 
 Three case studies: pneumonia etiology in children, prostate cancer, and
 mental disorders chosen for model development, identified low-risk
-patient population, reduced the risk of overtreatment, complications,
+patient population, reduced the risk of over-treatment, complications,
 adverse effects, and financial burden for patients (Disease
 Reclassification). Prostate cancer software was then implemented within
 the JHM HER.
@@ -94,7 +94,7 @@ Applications:
 -   embed tools to acquire and use the most relevant information,
     agnostic to its level of measurement, to improve population and
     individual health decisions for a better outcome at an affordable
-    costs. @Zeger2020
+    cost. @Zeger2020
 
 2.  **Bayesian Inference (parametric vs non-parametric)**
 
@@ -133,13 +133,13 @@ diagnosis in the Wolfram Language and integrated prior probabilities of
 disease with distributions of diagnostic measurands in both diseased and
 nondiseased populations. The approach enabled the evaluation of combined
 data from multiple diagnostic tests that improved the diagnostic
-accuracy, precision and adaptability. The model showed flexibility,
+accuracy, precision, and adaptability. The model showed flexibility,
 adaptability, and versatility in the diagnostic.
 
 Results
 
 Nonparametric Bayesian models tend to fit data distributions better,
-especially given limited existing literature, and are more robust in
+especially given the limited existing literature, and are more robust in
 capturing complex data patterns.
 
 These models produce multimodal probability patterns for disease, unlike
@@ -472,10 +472,11 @@ likelihood of the current data provided a posterior distribution to
 predict the risk for a specific disease. The sequential approach
 included -
 
-1.  Basic model developed via logistic regression used prior
-    information constructed on gender, age, age2, and time period.
+1.  Basic model developed via logistic regression used prior information
+    constructed on gender, age, age2, and time period.
 
-2.  The Classical model (metabolic score model: MS model) included six MetS components.
+2.  The Classical model (metabolic score model: MS model) included six
+    MetS components.
 
 3.  The third (enhanced model) incorporated information on smoking,
     drinking, betel-quid, and family history of CVD.
@@ -552,11 +553,10 @@ doctors/specialists, - an indicator of healthcare demand) with discrete
 response variable and a skewed distribution,under-dispersion,
 over-dispersion and excess of zeros.
 
+Diabetes prediction @M.L.2014
+
 ## Methods
 
--   Detail the models or algorithms used.
-
--   Justify your choices based on the problem and data.
 
 *The common non-parametric regression model is*
 $Y_i = m(X_i) + \varepsilon_i$*, where* $Y_i$ *can be defined as the sum
@@ -568,26 +568,41 @@ $m(x)$ *can be estimated with the product of* $Y_i$ *average and* $X_i$
 the line through the data points with the help of surrounding data
 points. The estimation formula is printed below [@R-base]:*
 
-## Method and data preparation ##
+## Method and data preparation
 
 Methodology
 
-Staistical software used is R and packages were installed> We used libraries in R to run the analysis. The .xpt files were converted to df using haven package that reads .XPT files.
+Statistical software R is used, packages installed and libraries were
+run in R for data import, management and analysis. 
+Using haven
+package .XPT files were converted to R-object as dataframe (df).
 
-Statistical Method Used: 
+Statistical Method Used:
 
-Bayesian logistic Regression (GLM) will be used to calculate the probability of CVD.
-We will incorporate Prior for Bayesian logistic for CVD as Response Variable (Binary), and will use 
-a.	Bernoulli likelihood with a logit link is the standard, interpretable model for risk.
-b.	Weakly informative priors (Normal 0,1) - shrink extreme estimates,  preventing infinite/unstable odds ratios when some subgroups are rare or perfectly predict the outcome.
-1.	Priors -  
-•	Shrinkage is possible when including predictors (BMI, smoking, diet,                           demographics, labs). 
-•	Clinical beliefs (e.g., positive association for age/BMI, protective for HDL) can be encoded as priors to stabilize estimates and improve calibration
-2.	Bayesian modeling plays nicely with multiple imputation or joint, propagating uncertainty instead of silently dropping cases.
-3.	Calculated Posterior and credible intervals for both coefficients and individual risk will make clinical interpretation and shared decision-making models.
-4.	Bayesian logistic GLM gives an interpretable, survey-aware, uncertainty-quantified CVD      risk model that’s robust to sparse subgroups and easy to update.
-5.	For an easy update, a new NHANES cycle can update the calculated posterior rather than refitting from scratch, developing a live risk model.
+Bayesian logistic Regression (GLM) is used to calculate the
+probability of Diabetes. We incorporate default Prior for Bayesian logistic for
+Diabetes (Binary response variable), using Bernoulli likelihood
+with a logit link is the standard, interpretable model for risk b.
 
+1. By adding Priors -
+• Shrinkage is possible when including predictors (BMI, age, gender, race ). 
+• Clinical beliefs (e.g., positive association for
+age/BMI, protective for HDL) can be encoded as priors to stabilize
+estimates and improve calibration 
+
+2. Bayesian modeling plays nicely with multiple imputation or joint, propagating uncertainty instead of
+silently dropping cases. 
+
+3. Calculated Posterior and credible intervals for both coefficients and individual risk make clinical
+interpretation and shared decision-making models. 
+
+4. Bayesian logistic GLM gives an interpretable, survey-aware, uncertainty-quantified Diabetes
+risk model that’s robust to sparse subgroups and easy to update. 
+
+5. It is easy for an update, a new NHANES cycle can update the calculated posterior
+rather than refitting from scratch, developing a live risk model.
+
+Baysian MI and Bayesian Logistic regression @Austin2021
 
 $$
 M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
@@ -599,7 +614,6 @@ Weights are positive numbers and small if* $X_i$ *is far from* $x$*.*
 $$
 y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
 $$
-
 
 ```{r}
 #| label: Libraries
@@ -626,468 +640,374 @@ install.packages("nhanesA")
 
 ```
 
+## Analysis and Results
 
-## Analysis and Results: Data Exploration and Visualization
-
--   Describe your data sources and collection process.
+## Data Exploration and Visualization
 
 Data Source
 
-NHANES 2-year cross-sectional data, all variables are measured at the same visit for in 5 datasets  (demographics, labs, exam, diet, questionnaire) to classify current CVD status, using Bayesian logistic GLM.
-Data Management 
+NHANES 2-year cross-sectional data, with all variables measured at the
+same visit was extracted from 5 datasets (demographics, exam,
+questionnaire) from year 2013-2014.
 
-Df (download) -> select variables -> merging df -> created combined df for analysis -> coded missing and special codes -> categorzing variables
+Data Management
 
-Categorization and Creation of new variable
+The download datsets were explored for variables of
+interest. Selected variables were merged into a dataframe and later to create subsets for analysis. 
+The subsets were then merged to an analytic dataframe, cleaned, categorized, and recoded. 
+The merged dataframe was then explored for basic statistics and any anamolies and patters before running regression analysis.
 
-1. Outcome Variable
+To have a final dataset is ready for interpretation, has good statistical
+power. the descriotives of and proper handling of missing values was conducted. Final Analytic
+dataset included binary response variable (Diabetes), predictor variables
+(BMI), and covariates (age, gender, and race). Multiple
+linear regression is performed and to handle complete-case deletion issues (liswise deletion) the quasi-complete data was handled by Baysian data augmentatio before running Bayesian logistic regression. 
 
-CVD
-•	Composite cardiovascular disease outcome (CVD) derived by combining MCQ series("MCQ160B",  "MCQ160C" , "MCQ160D" ,"MCQ160E" ,"MCQ160F").
-• In CVD, the data was transformed the original values (Yes or no) into a new set of numeric codes:
-•	“Yes” → 1
-•	“No” → 0
-•	Missing → NA
-
-2. Predictors
-
-Smoking Variable (SMQ030) categorization
-
-•	The numeric variable in the original dataset (SMQ030- Age started smoking regularly (in years) was transformed to categorical variable with 3 levels
-•	Derived categorical variable (smoking_cat):
-o	Never smoker: SMQ030 = NA
-o	Early starter: SMQ030 ≤ 18 years
-o	Late starter: SMQ030 > 18 years
-We found it rationale as participants who never smoked do not report an age (Never smokers), further categorization into early vs. late starters allows assessment of age at initiation as a risk factor. Smoking categories are included in the logistic regression model, with “Never smoker” as the reference group.
-
-Body Mass Index (BMI) 
-
-•	The original variable: BMDBMIC (measured BMI) in the data is a categorized variable (BMI_cat) based on percentiles and has 4 levels:	
-o	Underweight (<5th percentile)	
-o	Normal (5th–<85th)	
-o	Overweight (85th–<95th)	
-o	Obese (≥95th percentile)	
-o	Missing	
-We kept it as it is as categorization provides clinically interpretable groups.
-
-Age categorization
-age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
-
-Final Analytic Dataset (Response and Predictor variables)
-•	Outcome: CVD (binary)
-
-•	Predictors:
-o	SEQN  num   
-o	CVD     binary (1 = any “Yes”, 0 = all “No”, NA if all missing).
-o	smoking_cat 	(factor, 3 levels)
-Never (no and missing, assuming they never started)
-Early (<=18 years) 
-Late (>18 years) 
-o	BMI_cat (factor, 4 levels): 
-Underweight 
-Normal 
-Overweight 
-Obese 
-
-•	Co-variates: 
-o	Gender	 (factor, 2 levels): Male : Female 
-o	Ethnicity (factor, (5 levels)
-Mexican American
-Non-Hispanic White 
-Non-Hispanic Black
-Other Hispanic                   
-Other Race - Including Multi-Racial 
-o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
-
-
-This final dataset is interpretable, with good statistical power, and with proper handling of missing values within the data and within each variable.
 
 ```{r message=FALSE, warning=FALSE}
 #| label: nhanes tables
 #| include: false
 
-
-
  # making subsets for each dataset  
                        
                        nhanesTables('EXAM', 2013)
-                       nhanesTables('DIETARY', 2013)
-                       nhanesTables('LAB', 2013)
                        nhanesTables('QUESTIONNAIRE', 2013)
                        nhanesTables('DEMOGRAPHICS', 2013)
                        
                   
   #  files for 2013–2014
                        
-                       mcq_h <- nhanes("MCQ_H")         #Exam    
-                       bmx_h <- nhanes("BMX_H")         #Exam
-                       dsqtot_h <- nhanes("DSQTOT_H")    #Diet
-                       tchol_h <- nhanes("TCHOL_H")      # Lab
-                       cdq_h <- nhanes("CDQ_H")          #Quest
-                       smq_h <- nhanes("SMQ_H")            #Quest
-                       demo_h <- nhanes("DEMO_H")         #Demo
+                         bmx_h <- nhanes("BMX_H")         #Exam
+                       smq_h <- nhanes("SMQ_H")         #Quest
+                       demo_h <- nhanes("DEMO_H")       #Demo
+                       diq_h <- nhanes("DIQ_H")         #diabetes
+
+
+# Example: pick only the variables you need
+exam_sub <-   bmx_h  %>% select(SEQN, BMDBMIC)
+demo_sub <- demo_h %>% select(SEQN, RIDAGEYR, RIAGENDR, RIDRETH1, SDMVPSU, SDMVSTRA, WTMEC2YR)
+diq_sub <-  diq_h %>% select (SEQN, DIQ240)
+
+
+names(exam_sub)
+names(demo_sub)
+names(diq_sub)
+
+
+merged_data <- exam_sub %>%
+  left_join(demo_sub, by = "SEQN") %>%
+  left_join(diq_sub, by = "SEQN")
+head(merged_data)
+
+                       
+                       
+library(survey)
+nhanes_design <- svydesign(
+  id = ~SDMVPSU,
+  strata = ~SDMVSTRA,
+  weights = ~WTMEC2YR,
+  data = merged_data,
+  nest = TRUE
+)
+
+# Example: weighted mean age
+svymean(~RIDAGEYR, design = nhanes_design, na.rm = TRUE)
+svymean(~SEQN, design = nhanes_design, na.rm = TRUE)
+svymean(~BMDBMIC, design = nhanes_design, na.rm = TRUE)
+svymean(~RIAGENDR, design = nhanes_design, na.rm = TRUE)
+svymean(~RIDRETH1, design = nhanes_design, na.rm = TRUE)
+
+
                        
 ```
 
-Data Preparation 
+Data Preparation
 
 Variable Selection and merging of the subsets
 
-Subset were created from each df, all NAs were observed in each subset with selected variables and summed before merging the subsets, in each column and sum of NAs in all columns. 
-
-Merging of all variables from different datasets into a merged df for analysis
+Subsets were created from each downloaded dataframe with selected
+variables of interest, and explored for NAs. Subsets were then merged to
+form a combined dataframe for analysis.
 
 ```{r message=FALSE, warning=FALSE}
-#| label: merger dataframe
+#| label: merged dataframe
 #| include: false
 
-                
-    # Variable of Interest from datasets (5) to create subsets of each dataset
-    # variables total (14)
-                       
-                       
-            #demo_var = SEQN , RIDAGEYR,RIAGENDR,RIDRETH1
-            #diet_var = SEQN , DSD010          
-            #exam_var = SEQN , BMDBMIC  
-            #quest_var = SEQN, CDQ009F,SMD030, MCQ160B, MCQ160C, MCQ160D, MCQ160E, MCQ160F
-            #lab_var = SEQN, LBDTCSI
-                       
-                       
-      # Subset demo dataset
-                       demo_subset <- demo_h %>%
-                         select(SEQN, RIDAGEYR, RIAGENDR, RIDRETH1)
-                       
-      # Subset lab dataset
-                       lab_subset <- tchol_h %>%
-                         select(SEQN, LBDTCSI)
-                     
-                       
-      # Subset questionnaire dataset
-                       mcq_subset <- mcq_h %>%
-                         select(SEQN, MCQ160B, MCQ160C,MCQ160D,MCQ160E,MCQ160F)
-                       
-                       cdq_subset <- cdq_h %>%
-                         select(SEQN, CDQ009F)
-                       
-                       smq_subset <- smq_h %>% 
-                         select (SEQN, SMD030)
-                       
-          # Subset exam dataset
-                       bmx_subset <- bmx_h %>%
-                         select(SEQN, BMDBMIC) 
-        
-          # Subset diet dataset
-                       dsqtot_subset <- dsqtot_h %>%
-                         select(SEQN , DSD010) 
-                       
-              
-          # Check for missing in all subsets
-                       
-                       #demo_subset
-                       #lab_subset
-                       #mcq_subset
-                       #cdq_subset
-                       #smq_subset
-                       #bmx_subset
-                       #dsqtot_subset
-                       
-          # all NAs were summed before merging the subsets
-                       
-                       sum(is.na(demo_subset))
-                       sum(is.na(lab_subset))
-                       sum(is.na(mcq_subset))
-                       sum(is.na(cdq_subset))
-                       sum(is.na(smq_subset))
-                       sum(is.na(bmx_subset))
-                       sum(is.na(dsqtot_subset))
-                       
-                       colSums(is.na(demo_subset))
-                       colSums(is.na(lab_subset))
-                       colSums(is.na(mcq_subset))
-                       colSums(is.na(cdq_subset))
-                       colSums(is.na(dsqtot_subset))
-                       colSums(is.na(smq_subset))
-                       colSums(is.na(bmx_subset))
-                       
-                       
-                       sum(is.na(demo_subset$SEQN))
-                       sum(is.na(lab_subset$SEQN))
-                       sum(is.na(mcq_subset$SEQN))
-                       sum(is.na(cdq_subset$SEQN))
-                       sum(is.na(dsqtot_subset$SEQN))
-                       sum(is.na(smq_subset$SEQN))
-                       sum(is.na(bmx_subset$SEQN))
-                           
-   # merging varaibles without cleaning  
-                       
-                       
-  ## Created merged dataframe
-                       
-                       merged_data_1 <- demo_subset %>%
-                         left_join(smq_subset,   by = "SEQN") %>%
-                         left_join(dsqtot_subset,  by = "SEQN") %>%
-                         left_join(cdq_subset,  by = "SEQN") %>%
-                         left_join(mcq_subset,  by = "SEQN") %>%
-                         left_join(lab_subset,  by = "SEQN")  %>%
-                         left_join(bmx_subset,by = "SEQN")
-                      
-                      
-                       colSums(is.na(merged_data_1))
-                       
-                       
-  # observing the merged dataframe (merged_data_1)
-                      
-                      sum(complete.cases(merged_data_1))
-                       nrow(merged_data_1)
-                       ncol(merged_data_1)
-                       #names(merged_data_1)
+unique(diq_h$DIQ240)
+table(diq_h$DIQ240, useNA = "ifany")
 
+unique(demo_h$RIAGENDR)
+table(demo_h$RIAGENDR, useNA = "ifany")
+
+unique(demo_h$RIDAGEYR)
+table(demo_h$RIDAGEYR, useNA = "ifany")
+
+unique(demo_h$RIDRETH1)
+table(demo_h$RIDRETH1, useNA = "ifany")
+
+unique(bmx_h$BMDBMIC)
+table(bmx_h$BMDBMIC, useNA = "ifany")
 
 ```
 
-
 Data Cleaning
 
-•	Silently dropping cases = throwing out any rows with missing values (aka complete-case analysis). Loosing sample size (power) can introduce bias if the missingness isn’t completely random. In the dataset, the missing values (NA) are kept as NA, and we used complete-case analysis (or “listwise deletion”) criteria as regression with glm(), R will automatically drop any row with NA in the model variables. It was the simplest approach to handle missingness, and we aware of losing sample size and introducing bias if missingness is informative.
+• Silently dropping cases = throwing out any rows with missing values
+(aka complete-case analysis). Loosing sample size (power) can introduce
+bias if the missingness isn’t completely random. In the dataset, the
+missing values (NA) are kept as NA, and we used complete-case analysis
+(or “listwise deletion”) criteria as regression with glm(), R will
+automatically drop any row with NA in the model variables. It was the
+simplest approach to handle missingness, and we aware of losing sample
+size and introducing bias if missingness is informative.
 
-•	NHANES special codes (as below) were transformed to NAs, preserving the number of rows intact, considering special codes are not random and cannot be dropped. 
-Type	Codes / Values	Meaning
-Refused	7, 77, 777, 7777	Participant refused to answer
-Don’t know / Unknown	9, 99, 999, 9999	Participant didn’t know or unknown
-Not applicable / skipped	8, 88, 888, 8888	Variable not applicable or skipped
-Other	0	Sometimes “No” depending on variable (check codebook)
+• NHANES special codes (as below) were transformed to NAs, preserving
+the number of rows intact, considering special codes are not random and
+cannot be dropped. Type Codes / Values Meaning Refused 7, 77, 777, 7777
+Participant refused to answer Don’t know / Unknown 9, 99, 999, 9999
+Participant didn’t know or unknown Not applicable / skipped 8, 88, 888,
+8888 Variable not applicable or skipped Other 0 Sometimes “No” depending
+on variable (check codebook)
 
+Exclusions
 
-Exclusions 
-
-•	Participants missing CVD response in all MCQ160 series were merged into NO.
-•	Participants with missing in smoking_cat were added under “Never” to preserve the row numbers. 
-•	CDQ009F (Pain in left chest) column, with a high % of missingness, was excluded to avoid overlap with the CVD response.
+• Participants missing CVD response in all MCQ160 series were merged
+into NO. • Participants with missing in smoking_cat were added under
+“Never” to preserve the row numbers. • CDQ009F (Pain in left chest)
+column, with a high % of missingness, was excluded to avoid overlap with
+the CVD response.
 
 Names of the selected variables.
 
 ```{r message=FALSE, warning=FALSE}
-#| label: missing final dataset
+#| label: missing values_final data
+#| include: false
 
-     # handling special codes
-                                         
-      special_codes <- c(7, 9, 77, 99)
-                       
-       missing_summary <- sapply(merged_data_1, function(x) sum(is.na(x) | x %in% special_codes))
-      missing_summary
-                       
-                     
-## Special codes "Refused" = 7,77 ; "Don't know" = 9,99
-                       
-                       special_codes <- c(7, 9, 77, 99, 888)
-                       cols_with_special_codes <- sapply(merged_data_1, function(x) any(x %in% special_codes, na.rm = TRUE))
-                       cols_with_special_codes[cols_with_special_codes == TRUE]
-                       
-                       
-   # Variables to clean  
-                       
-        vars_to_clean <-c("DSD010","MCQ160B","MCQ160C","MCQ160D","MCQ160E","MCQ160F","SMD030")
-                       
-        special_codes <- c(7, 9, 77, 99, 777,999)
-                       
-  # Replace special codes with NA
-                       
-                       for (v in vars_to_clean) {
-                         merged_data_1[[v]][merged_data_1[[v]] %in% special_codes] <- NA
-                       }
-                       
-                       
-  # Check for the number of NAs in each variable
-                       
-                       sapply(merged_data_1[, vars_to_clean], function(x) sum(is.na(x)))
-                       
-  # summary and structure of the final data frame after managing special codes
-                       
-                       #summary(merged_data_1[, vars_to_clean])
-                       #str(merged_data_1)
-                       #summary(merged_data_1)
-                       
-                       
-# Exclude CDQ009F (chest pain) since it overlaps with CVD outcome and >70% missing values
-                       
-                       merged_data_1$CDQ009F <- NULL
-                       #summary(merged_data_1)
 
+
+
+sum(is.na(merged_data$DIQ240))   # number of missing in DIQ240
+sum(is.na(merged_data$RIDAGEYR)) # number of missing in RIDAGEYR
+sum(is.na(merged_data$BMDBMIC)) # number of missing in RIDAGEYR
+sum(is.na(merged_data$RIAGENDR)) # number of missing in RIDAGEYR
+sum(is.na(merged_data$SEQN)) # number of missing in RIDAGEYR
+
+
+
+# Count NAs in all columns
+colSums(is.na(merged_data))
+
+missing_codes <- c(7, 8, 9, 77, 88, 99, 777,999)
+# Example for DIQ240
+sum(merged_data$DIQ240 %in% missing_codes)
+sum(merged_data$RIDAGEYR %in% missing_codes)
+sum(merged_data$BMDBMIC %in% missing_codes)
+sum(merged_data$RIAGENDR  %in% missing_codes)
+sum(merged_data$SEQN  %in% missing_codes)
+
+
+merged_data # 9813 obs with 9 variables 
+
+
+# cleaning merged_data (# remove NAs)
+
+clean_data <- merged_data %>% ## filtering ##  row filter listwise removal
+  
+  filter(
+    !is.na(DIQ240),
+    !is.na(RIDAGEYR),
+    !is.na(BMDBMIC),
+    !is.na(RIAGENDR),
+    !is.na(SEQN)
+     )
+
+
+missing_codes <- c(7, 8, 9, 77, 88, 99, 777,999)     # checking special codes
+
+sum(clean_data$DIQ240 %in% missing_codes)
+sum(clean_data$RIDAGEYR %in% missing_codes)
+sum(clean_data$BMDBMIC %in% missing_codes)
+sum(clean_data$RIAGENDR  %in% missing_codes)
+
+
+clean_data            # clean_data with no NAs (14 obs and 9 variables)
+
+summary(clean_data)
 
 ```
 
-
 Creating new variables and categorization
 
+1.  Response Variable
 
-1. Outcome Variable
+    CVD - Composite cardiovascular disease outcome (CVD- binary) is
+    derived by combining MCQ series("MCQ160B", "MCQ160C" ,
+    "MCQ160D","MCQ160E","MCQ160F"•
 
-CVD
-•	Composite cardiovascular disease outcome (CVD) derived by combining MCQ series("MCQ160B",  "MCQ160C" , "MCQ160D" ,"MCQ160E" ,"MCQ160F").
-• In CVD, the data was transformed the original values (Yes or no) into a new set of numeric codes:
-•	“Yes” → 1
-•	“No” → 0
-•	Missing → NA
+    -   Ever told had congestive heart failure MCQ160B
 
-2. Predictors
+    -   Ever told you had coronary heart disease MCQ160C
 
-Smoking Variable (SMQ030) categorization
+    -   Ever told you had angina/angina pectoris MCQ160D
 
-•	The numeric variable in the original dataset (SMQ030- Age started smoking regularly (in years) was transformed to categorical variable with 3 levels
-•	Derived categorical variable (smoking_cat):
-o	Never smoker: SMQ030 = NA
-o	Early starter: SMQ030 ≤ 18 years
-o	Late starter: SMQ030 > 18 years
-We found it rationale as participants who never smoked do not report an age (Never smokers), further categorization into early vs. late starters allows assessment of age at initiation as a risk factor. Smoking categories are included in the logistic regression model, with “Never smoker” as the reference group.
+    -   Ever told you had heart attack MCQ160E
 
-Body Mass Index (BMI) 
+    -   Ever told you had a stroke MCQ160F
 
-•	The original variable: BMDBMIC (measured BMI) in the data is a categorized variable (BMI_cat) based on percentiles and has 4 levels:	
-o	Underweight (<5th percentile)	
-o	Normal (5th–<85th)	
-o	Overweight (85th–<95th)	
-o	Obese (≥95th percentile)	
-o	Missing	
-We kept it as it is as categorization provides clinically interpretable groups.
+        The variable CVD, was transformed from the original values (Yes
+        or no) and recoded into numeric and binary (1 = any “Yes”, 0 =
+        all “No”, NA if all missing).
 
-Age categorization
-age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
+    Predictor Variables
 
-Final Analytic Dataset (Response and Predictor variables)
-•	Outcome: CVD (binary)
+    -   Smoking Variable (SMQ030) was categorized from numeric format in
+        the original dataset (SMQ030) to categories based on the age (in
+        years) of starting smoking regularly. The variable has 3 levels
+        (smoking_cat):
 
-•	Predictors:
-o	SEQN  num   
-o	CVD     binary (1 = any “Yes”, 0 = all “No”, NA if all missing).
-o	smoking_cat 	(factor, 3 levels)
-Never (no and missing, assuming they never started)
-Early (<=18 years) 
-Late (>18 years) 
-o	BMI_cat (factor, 4 levels): 
-Underweight 
-Normal 
-Overweight 
-Obese 
+        -   Never smoker: SMQ030 = NA
 
-•	Co-variates: 
-o	Gender	 (factor, 2 levels): Male : Female 
-o	Ethnicity (factor, (5 levels)
-Mexican American
-Non-Hispanic White 
-Non-Hispanic Black
-Other Hispanic                   
-Other Race - Including Multi-Racial 
-o	age_cat   (factor, 4 levels): <20, 21-39, 40-59, 60+
+        -   Early starter: SMQ030 ≤ 18 years
+
+        -   Late starter: SMQ030 \> 18 years
+
+            We found it rationale to have missing under NAs, as
+            participants who never smoked do not report an age (Never
+            Smokers), and those who smoked were further categorized into
+            early vs. late starters based on age considering that it
+            allows better assessment of age at initiation as a risk
+            factor and can be included in logistic regression model,
+            with “Never smoker” as the reference group.
+
+    -   Body Mass Index (BMI)
+
+        The original data has BMDBMIC (measured BMI) as categorical and
+        had no missing values. It (BMI_cat) has the following 4 levels:\
+        o Underweight (\<5th percentile)\
+        o Normal (5th–\<85th)\
+        o Overweight (85th–\<95th) o Obese (≥95th percentile)\
+        o Missing We kept it as it is as categorization provides
+        clinically interpretable groups.
+
+    Covariates:
+
+    -   Gender (factor, 2 levels): Male: Female
+    -   Ethnicity (factor, 5 levels): Mexican American, Non-Hispanic,
+        White Non-Hispanic, Black Other Hispanic\
+        Other Race - Including Multi-Racial
+    -   age_cat (factor, 4 levels): \<20, 21-39, 40-59, 60+
 
 ```{r}
 #| label: new columns
 #| include: false
  
-  # Create New column: CVD (Response Variable) 
   
-       # Combine MCQ160 (B,C,D,E,F) series into a binary CVD variable
-  
-         # Convert Yes/No to 1/0
-           cols <- c("MCQ160B","MCQ160C","MCQ160D","MCQ160E","MCQ160F")
-            merged_data_1[cols] <- lapply(merged_data_1[cols], function(x) {
-           ifelse(x == "Yes", 1, ifelse(x == "No", 0, NA))
-            })
-         
-            
-            merged_data_1$CVD <- ifelse(rowSums(merged_data_1[, cols] == 1, na.rm = TRUE) > 0, 1,
-                            ifelse(rowSums(!is.na(merged_data_1[, cols])) == 0, NA, 0))
 
-            table(merged_data_1$CVD, useNA = "ifany")  
+ # After listwise deletion of NAs, the clean_data - not usable data #)
 
 
-# Create New variable smoking_cat based on age at start
 
-          merged_data_1$smoking_cat <- NA   # initialize with NA
+# cleaning of special characters(7,9,77,99) from merged_data (Raw data)
 
-# Categorize and factor smoking_cat:
-          
-          merged_data_1$smoking_cat[is.na(merged_data_1$SMD030)] <- "Never"          # Never smoker          (missing added because they never started)
-          merged_data_1$smoking_cat[merged_data_1$SMD030 <= 18] <- "Early"           # Started <= 18 
-          merged_data_1$smoking_cat[merged_data_1$SMD030 > 18]  <- "Late"            # Started > 18
+special_codes <- c(7, 9, 77, 99)  # removal of special codes from merged data
 
+cols_to_clean <- c("SEQN", "DIQ240","BMDBMIC","RIDAGEYR","RIAGENDR", "SDMVPSU","SDMVSTRA", "WTMEC2YR")
 
-          merged_data_1$smoking_cat <- factor(merged_data_1$smoking_cat, 
-                                    levels = c("Never", "Early", "Late"))
+# Loop over columns
 
-
-          table(merged_data_1$smoking_cat, useNA = "ifany")   # Check counts
-
-# Created Age Category grouped
-
-        merged_data_1$age_cat <- cut(
-        merged_data_1$RIDAGEYR,
-        breaks = c(-Inf, 19, 39, 59, Inf),     
-        labels = c("<20", "20-39", "40-59", "60+"),
-        right = TRUE                         
-          )
-
-```
-
--   Present initial findings and insights through visualizations.
-
-Summary statistics, histogram (continuous variables), and bar plot (categorical variables) were observed before regression analysis
-
-
-```{r echo=T, message=FALSE, warning=FALSE}
-#| label: tables
-
-
-table(merged_data_1$age_cat, useNA = "ifany")    # Check table distribution
-
-# Tables for all variable in the merged data frame for analysis
-
-table(merged_data_1$CVD)
-table(merged_data_1$smoking_cat)
-table(merged_data_1$age_cat)
-table(merged_data_1$RIAGENDR)
-table(merged_data_1$BMDBMIC)
-table(merged_data_1$RIDRETH1)
-
-
-# bar plot for categorical and histo for continuous variable
-
-plot_bar <- function(df, var) {
-  ggplot(df, aes_string(x = var)) +
-    geom_bar(fill = "steelblue") +
-    theme_minimal() +
-    labs(title = paste("Distribution of", var),
-         x = var,
-         y = "Count") +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+for (v in cols_to_clean) {
+  merged_data[[v]][merged_data[[v]] %in% special_codes] <- NA
 }
 
-
-plot_bar(merged_data_1, "CVD")
-plot_bar(merged_data_1, "smoking_cat")
-plot_bar(merged_data_1, "age_cat")
-plot_bar(merged_data_1, "RIAGENDR")
-plot_bar(merged_data_1, "BMDBMIC")
-plot_bar(merged_data_1, "RIDRETH1")
+summary(merged_data)  ## no removal of NAs in merged_data 
+                      # NAs are handled in the model 
 
 
-hist(merged_data_1$RIDAGEYR)
-hist(merged_data_1$SMD030)
-hist(merged_data_1$LBDTCSI)
+
+table (merged_data$BMDBMIC)
+table (merged_data$DIQ240)
+table (merged_data$RIAGENDR)
+table (merged_data$RIDRETH1)
+table (merged_data$RIDAGEYR)
+table(merged_data$BMDBMIC, merged_data$DIQ240)  # Listwise deletion - only 14 rows match
+table(merged_data$RIDRETH1, merged_data$DIQ240)
+
+summary (merged_data)     # NAs in RIDAGEYR,DIQ240,BMDBMIC
+
+# Multiple Logistic Regression with missingness
+
+m1<- glm(DIQ240 ~ BMDBMIC + RIDAGEYR + RIAGENDR + RIDRETH1,
+                       family = binomial, data = merged_data)  # quasi-complete separation
+
+# planning for Bayesian data augmentation
+
+# MCMC =  samples from the joint posterior (both regression coefficients and the missing values).
+
+
 
 ```
 
+-   Initial findings and insights through visualizations.
+-   Summary statistics, histogram (continuous variables), and bar plot
+    (categorical variables) were observed before regression analysis
+
+```{r message=FALSE, warning=FALSE}
+#| label: dat results and tables
+#| include: false
+
+
+
+## Imputation because the merged data has less number of complete cases (missingness in BMI and diabetes variables)
+
+library(mice)
+
+
+# Subset variables for imputation in analytic_data df
+
+vars <- c("SEQN","BMDBMIC",  "RIDAGEYR", "RIAGENDR", "RIDRETH1", "SDMVPSU",  "SDMVSTRA", "WTMEC2YR", "DIQ240"  )
+analytic_data <- merged_data[, vars]
+
+
+# Run mice to create 5 imputed datasets
+
+imputed_data <- mice(
+  analytic_data,
+  m = 5,              # number of imputed datasets
+  method = 'pmm',     # predictive mean matching
+  seed = 123
+)
+
+
+# First imputed dataset
+
+Imputed_data1 <- complete(imputed_data, 1)
+
+# Check if missingness is gone
+
+summary(Imputed_data1)
+colSums(is.na(Imputed_data1))  # check total missing values
+
+
+```
 
 Unexpected reports, patterns or anomalies.
 
-- The age showed a skewed histogram. Most population were from <20years range followed by 40-59years range   with mean age being 26 years
-- Smoking age when first started regularly shows a higher number in < 20 years range
-- lab report on total cholesterol had a mean of 4.53 (mmol/L) with max being 21 (mmol/L)
-- Non-Hispanic White were majority in the study cohort.
-- Majority reported normal weight but followed by higher number of obese population.
-- Female: Male population reported a higher side on females.
-- Majority reported never started smoking followed by the age of starting smoking regularly in the range    of early age (<18 years) category. 
-- Total number of population being told having CVD (stroke, coronary disease, heart attack, infarction)     reported "NO"
-
+-   The age showed a skewed histogram. Most population were from
+    \<20years range followed by 40-59years range with mean age being 26
+    years
+-   Smoking age when first started regularly shows a higher number in \<
+    20 years range
+-   lab report on total cholesterol had a mean of 4.53 (mmol/L) with max
+    being 21 (mmol/L)
+-   Non-Hispanic White were majority in the study cohort.
+-   Majority reported normal weight but followed by higher number of
+    obese population.
+-   Female: Male population reported a higher side on females.
+-   Majority reported never started smoking followed by the age of
+    starting smoking regularly in the range of early age (\<18 years)
+    category.
+-   Total number of population being told having CVD (stroke, coronary
+    disease, heart attack, infarction) reported "NO"
 
 ```{python}
 import pandas as pd
@@ -1099,19 +1019,51 @@ import pandas as pd
 
 ```
 
+```{r warning=FALSE}
+#| label: Modeling ansd Results
+#| echo: true
 
 
 
+merged_data <- rename(merged_data,
+       id = SEQN, # Respondent sequence number
+       gender = RIAGENDR,            # Gender
+       age = RIDAGEYR,               # Age in years at screening
+       diab = DIQ240,                # Do you see a dr for diabetes
+       BMI_cat = BMDBMIC,            # BMI
+       race = RIDRETH1               #Race
+       )
+head(merged_data,5)
+
+# Numeric summary for age
+summary(merged_data$age)
+summary(merged_data$gender)
+summary(merged_data$race)
+summary(merged_data$BMI_cat)
+summary(merged_data$diab)
 
 
+# Counts for categorical variables
+table(merged_data$age)
+table(merged_data$gender)
+table(merged_data$BMI_cat)
+table(merged_data$diab)
+table(merged_data$race)
+
+# Proportions
+prop.table(table(merged_data$diab))
+prop.table(table(merged_data$BMI_cat))
+prop.table(table(merged_data$gender))
+prop.table(table(merged_data$age))
+prop.table(table(merged_data$race))
 
 
+colSums(is.na(merged_data))
 
-
-
-```{r, warning=FALSE, echo=TRUE}
-
-
+table(merged_data$diab, merged_data$BMI_cat)
+table(merged_data$BMI_cat, merged_data$diab, useNA="ifany") # before cleaning and imputation
+table(merged_data$gender, merged_data$diab, useNA="ifany")
+table(merged_data$age, merged_data$diab, useNA="ifany")
 
   
 
@@ -1129,7 +1081,230 @@ import pandas as pd
 
 ```{r}
 
+
+library(ggplot2)
+
+# Age distribution
+ggplot(merged_data, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  theme_minimal() +
+  labs(title = "Age Distribution", x = "Age (years)", y = "Count")
+
+# BMI category
+ggplot(merged_data, aes(x = BMI_cat)) +
+  geom_bar(fill = "salmon") +
+  theme_minimal() +
+  labs(title = "BMI Category Distribution", x = "BMI Category", y = "Count")
+
+# Race category
+ggplot(merged_data, aes(x = race)) +
+  geom_bar(fill = "salmon") +
+  theme_minimal() +
+  labs(title = "Race Category Distribution", x = "Race Category", y = "Count")
+
+# Gender
+ggplot(merged_data, aes(x = gender)) +
+  geom_bar(fill = "lightgreen") +
+  theme_minimal() +
+  labs(title = "Gender Distribution", x = "Gender", y = "Count")
+
+# Outcome
+ggplot(merged_data, aes(x = factor(diab))) +
+  geom_bar(fill = "purple") +
+  theme_minimal() +
+  labs(title = "Diabetes Status (DIQ240)", x = "Diabetes (2 = No, 1 = Yes)", y = "Count")
+
+
+# Cross - tabulation #
+
+# DIQ240 by Age #
+ggplot(merged_data, aes(x = age , y = factor(diab))) +
+  geom_boxplot(fill = "lightblue") +
+  theme_minimal() +
+  labs(title = "Age by Diabetes Status", x = "Age", y = "Diabetes (2 = No, 1 = Yes)" )
+
+
+#  DIQ240 by BMI  #
+
+## ALL NAs ## 
+ggplot(merged_data, aes(x = BMI_cat  , fill = factor(diab))) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Diabetes by BMI Category", x = "BMI Category", y = "Proportion", fill = "diab")   
+
+
+# DIQ240 by Race  #
+ggplot(merged_data, aes(x = race, fill = factor(diab)  )) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Diabetes by Race ", x = "Race ", y = "Proportion", fill = "diab")
+
+# DIQ240 by Gender
+
+ggplot(merged_data, aes(x = gender, fill = factor(diab)  )) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Diabetes by Race ", x = "gender ", y = "Proportion", fill = "diab")
+
+
 ```
+
+
+
+
+```{r}
+
+# load a libraries
+library(knitr) # fancy table
+library(tidyverse) # load library tidyverse
+library(classpackage)
+
+
+# To display fancy tables
+kable(head(merged_data,10))
+table(merged_data$diab, useNA = "ifany")
+
+# modelling assuption check (# for correlation # )
+
+# 1. complete case dataset (assumotions)
+
+names(Imputed_data1)
+
+m1 <- glm(DIQ240 ~ RIDAGEYR + RIAGENDR + RIDRETH1 + BMDBMIC,
+          data = Imputed_data1, 
+          family = binomial)
+
+# Get the predicted logit
+Imputed_data1$logit <- predict(m1, type = "link")  # 'link' gives log-odds
+
+# Plot BMI vs logit
+
+plot1 <- ggplot(Imputed_data1, aes(x = RIDAGEYR, y = logit)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "loess") +
+  labs(x = "RIDAGEYR", y = "Log-odds of Diabetes")
+
+plot1       #Implication for modeling:
+
+# Relationship (age and log-odds of diabetes)= roughly linear but not perfectly, acceptable for logistic regression assumptions ##
+
+
+# collinearity check #
+
+library(car)
+vif(m1)  # VIF > 5 or 10 indicates multicollinearity # No multicollinearity # 
+
+
+# Check for outliers # 
+library(broom)
+influence <- broom::augment(m1)
+ggplot(influence, aes(x = .hat, y = .cooksd)) +
+  geom_point() +
+  labs(x = "Leverage", y = "Cook's Distance")
+
+
+
+Imputed_data1 <- Imputed_data1 %>%
+  mutate(outlier =  if_else(abs(rstandard(m1))>2.5, "Suspected", "Not Suspected"))
+
+
+Imputed_data1 %>% count(outlier)
+
+
+
+Imputed_data1 %>% ggplot(aes(x = RIDAGEYR, y = DIQ240, color = outlier)) +
+  geom_point() + 
+  scale_color_manual(values = c("#999999", "#000000")) +
+  labs(x = "RIDAGEYR", y = "DIQ240", color = "Outlier") +
+  theme_bw()
+
+
+library(ResourceSelection)
+hoslem.test(Imputed_data1$DIQ240, fitted(m1))
+
+library(pROC)
+roc(Imputed_data1$DIQ240, fitted(m1)) %>% plot()
+
+
+
+anova_check(m1)
+summary(m1)
+
+library(glmtoolbox)
+(adjR2(m1))
+
+
+levels(Imputed_data1$DIQ240)
+# Output: "No" "Yes"
+
+# Table of counts for each code
+table(Imputed_data1$DIQ240, useNA = "ifany")
+
+
+labelled::look_for(Imputed_data1, "DIQ240")
+
+# Assuming your data frame is named 'df' and the column is 'my_binary_column'
+table(Imputed_data1$DIQ240) 
+
+table(diq_h$DIQ240)
+unique(diq_h$DIQ240)
+
+str(diq_h$DIQ240)
+# See numeric codes (1 = Yes, 2 = No)
+table(as.numeric(Imputed_data1$DIQ240), useNA = "ifany")
+```
+
+
+```{r}
+#| label: brms
+#| eval: false
+#| include: false
+
+
+glm(DIQ240     ~ RIDAGEYR + BMDBMIC + RIDRETH1 + RIAGENDR                                   , 
+    family = binomial, data = Imputed_data1)
+
+names(merged_data)
+
+library(brms)
+
+# Main logistic regression model with missing-data handling
+form_main <- bf(
+  diab ~ mi(BMI_cat) + mi(age) + gender + race,
+  family = bernoulli()
+)
+
+# Submodels for missing variables
+
+form_age <- bf(age | mi() ~ gender + gender + BMI_cat)
+form_bmi <- bf(BMI_cat | mi() ~ gender + race + age)
+
+# Combine into one joint model
+form_all <- form_main + form_age + form_bmi
+
+# Fit Bayesian logistic regression with data augmentation
+
+
+get_prior(form_all, data = merged_data, family = bernoulli())
+
+
+
+
+
+
+fit_bayes <- brm(
+  formula =form_all,
+  data = merged_data,
+  prior = c(
+    set_prior("normal(0, 2.5)", class = "b")  # weakly informative prior
+  ),
+  chains = 4, iter = 2000, cores = 4, seed = 123
+)
+
+summary(fit_bayes)
+```
+
+
 
 ### Conclusion
 
