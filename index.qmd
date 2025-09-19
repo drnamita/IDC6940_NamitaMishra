@@ -738,6 +738,7 @@ nhanesCodebook("BMX_H",'BMDBMIC')
 
 ```
 
+
 ```{r}
 
 install.packages("gt")   # if not already installed
@@ -746,8 +747,11 @@ library(gt)
 variables <- c("SEQN", "BMDBMIC", "RIDAGEYR", "RIAGENDR", "RIDRETH1", 
                "SDMVPSU", "SDMVSTRA", "WTMEC2YR", "DIQ240")
 
+
+
+
 df <- data.frame(Variable = variables, Description = descriptions <- c("Respondent sequence number", 
-                  "BMI calculated as weight in kilograms divided by height in meters squared, and then rounded to one decimal place.", 
+        "BMI calculated as weight in kilograms divided by height in meters squared, and then rounded to one decimal place.", 
                   "Age Age in years of the participant at the time of screening. Individuals 80 and over are topcoded at 80 years of age.", 
                   "Gender", 
                   "Race/ethnicity Recode of reported race and Hispanic origin information", 
@@ -763,7 +767,7 @@ df %>%
   tab_footnote(
     footnote = "Each variable in the dataset, accompanied by a qualitative description from the study team."
   )
-
+          
 
 ```
 
@@ -801,7 +805,7 @@ were explored and analyzed.
 
 ```{r message=FALSE, warning=FALSE}
 #| label: merged dataframe
-#| include: false
+#| echo: true
 
 library(DataExplorer)
 
@@ -823,13 +827,10 @@ plot_qq(merged_data$RIDAGEYR, title = "Figure 5. QQ plots to assess normality of
 
 unique(diq_h$DIQ240)
 table(diq_h$DIQ240, useNA = "ifany")
-
 unique(demo_h$RIAGENDR)
 table(demo_h$RIAGENDR, useNA = "ifany")
-
 unique(demo_h$RIDRETH1)
 table(demo_h$RIDRETH1, useNA = "ifany")
-
 unique(bmx_h$BMDBMIC)
 table(bmx_h$BMDBMIC, useNA = "ifany")
 
