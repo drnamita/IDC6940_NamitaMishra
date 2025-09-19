@@ -693,6 +693,7 @@ Age (num, continuous)
 
 ```{r message=FALSE, warning=FALSE}
 #| label: nhanes tables
+#| include: false
 
  # making subsets for each dataset  
                        
@@ -727,8 +728,6 @@ merged_data <- exam_sub %>%
   left_join(diq_sub, by = "SEQN")
 head(merged_data)
 
-
-merged_data
 
 nhanesCodebook("DEMO_H",'RIDRETH1')
 nhanesCodebook("DEMO_H",'RIAGENDR')
@@ -1422,9 +1421,12 @@ m1 <- glm(diab ~ age + BMI_cat + race + gender                                  
 m2 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
     family = binomial, data = Imputed_data1)
 
+m3
+
 
 m1
 m2
+m3
 
 anova(m1)
 anova(m2)
@@ -1432,7 +1434,8 @@ anova(m2)
 adjR2(m1)
 adjR2(m2)
 
-
+ # Q-Q Plot
+      qqPlot(residual_imputed1, main = "Figure 13. Q-Q Plot of Residuals")
 ```
 
 mi = race is significant m2= age, race, gender
@@ -1443,34 +1446,25 @@ mi = race is significant m2= age, race, gender
 #| include: false
 
 library(brms)
-
 library(GGally)
 
+## merged data before augmentation
 
 merged_data_corr <- merged_data %>% select(age, BMI_cat, gender, race)
-
-library(dplyr)
-SW <- starwars %>% 
-  select(height:species) %>% 
-  mutate(hair_color = as.factor(hair_color), 
-         skin_color = as.factor(skin_color), 
-         eye_color = as.factor(eye_color), 
-         gender = as.factor(gender), 
-         homeworld = as.factor(homeworld), 
-         species = as.factor(species))
 pairs(merged_data_corr)
-
-
 
 ## Bayesian data augmentation and regression both together #
 
 merged_data$diab <- ifelse(merged_data$diab == "Yes", 1,
                            ifelse(merged_data$diab == "No", 0, NA))
 
+
+## Augmentation and Prior ##
+
 # For intercept prior (Nhanes dataset) 
 # informative prior = intercept #
 
-svymean(~DIQ240, design = nhanes_design, na.rm = TRUE)   # NHANES prevalance 
+svymean(~DIQ240, design = nhanes_design, na.rm = TRUE)   # NHANES prevalence 
 p <- 0.78759
 logit_intercept <- log(p / (1 - p))     # mean #
 logit_intercept
