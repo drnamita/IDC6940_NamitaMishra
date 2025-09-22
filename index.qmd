@@ -739,12 +739,11 @@ nhanesCodebook("BMX_H",'BMDBMIC')
 
 ```{r}
 
-install.packages("gt")   # if not already installed
+install.packages("gt")   
 library(gt)
 
 variables <- c("SEQN", "BMDBMIC", "RIDAGEYR", "RIAGENDR", "RIDRETH1", 
                "SDMVPSU", "SDMVSTRA", "WTMEC2YR", "DIQ240")
-
 
 
 
@@ -807,8 +806,6 @@ were explored and analyzed.
 
 library(DataExplorer)
 
-introduce(iris)
-
 str(merged_data)
 plot_str(merged_data)
 introduce(merged_data)
@@ -825,41 +822,36 @@ plot_qq(merged_data$RIDAGEYR, title = "Figure 5. QQ plots to assess normality of
 
 
 
+
+
 ```
 
 ## Explain your data preprocessing and cleaning steps.
 
 Data Cleaning
 
-We explored the merged dataset for missing values (NA) and special
-codes. Special codes (7,9,77,99) considering special codes are not
-random and cannot be dropped, depending on variable (check codebook)
-were transformed into NAs, and all missing values (NAs) were included in
-the analysis.
-
-We left NAs in the dataset, since R automatically excludes rows with NA
-(listwise deletion or complete case analysis). In the listwise deletion,
-the rows with missing data were silently dropped, leading to a reduction
-in sample size. We acknowledged that the procedure may introduce bias
-(MAR or MNAR), since informative missingness is ignored, so to avoid
-sample loss and potential bias in subsequent analyses, multiple
-imputation (MI) we considered as an alternative approach (Bayesian
-imputation and regression).
-
-All NAs were summed and analyzed in the merged dataframe and special
-codes were transformed and complete case analysis) performed to create a
-clean dataframe.
+We explored the merged dataset for missing values (NA), special codes
+(7,9,77,99) and considering special codes are not random and cannot be
+dropped, based on variable (codebook) they were transformed into NAs,
+and missing values (NAs) were included in the analysis, since R
+automatically excludes rows with NA via listwise deletion or complete
+case analysis during rgression. Listwise deletion of rows with missing
+data were silently dropped, leading to a reduction in sample size. We
+acknowledged that the procedure may introduce bias (MAR or MNAR), since
+informative missingness is ignored, so to avoid sample loss and
+potential bias in subsequent analyses, we considered multiple imputation
+(MI), we considered as an alternative approach. All NAs were summed and
+analyzed in the merged dataframe and complete case analysis was
+performed to create a clean dataframe.
 
 The bar plots in Figure 4 show frequency distributions for categories
-(BMI, gender, diabetes status, race). It appears that:
+(BMI, gender, diabetes status, race). It appears that: Most cases are
+non-hispanic whites. Of those who reported diabetes status, more counts
+reported having diabetes. Gender are relatively evenly distributed.
+Majority population were in the normal BMI range.
 
-Most cases are non-hispanic whites. Of those who reported diabetes
-status, more counts reported had diabetes. The number of observations
-decreases at subsequent measurements. Gender are relatively evenly
-distributed. Majority population were in the normal BMI range
-
-Histograms in Figure 5 shows age frequency and distributions showing a
-slight right skew.
+Histograms in Figure 5 shows age frequency distributions with slight
+right skewness.
 
 ```{r message=FALSE, warning=FALSE}
 #| label: missing values_final data
@@ -882,8 +874,9 @@ sum(merged_data$SEQN  %in% missing_codes)
 
 ```
 
-The NAs were removed (listwise deletion) from the merged data. Clean
-data with reported complete cases (n=14).
+After listwise deletion of NAs from the merged data, the clean data
+reported complete cases (n=14) and the sample size was reduced with
+resulting perfect (or quasi-perfect) separation.
 
 ```{r}
 #| include: false
@@ -929,9 +922,8 @@ colSums(is.na(clean_data))
 
 ```
 
-Special codes in merged data were recoded, while NAs were included in
-the dataset. Variables were named accordingly and we performed multiple
-linear regression on merged (raw dataset).
+Multiple linear regression performed on merged (raw dataset) resulted in
+a reduced sample size.
 
 ```{r}
 #| label: new columns
@@ -977,11 +969,16 @@ merged_data <- rename(merged_data,
 ```{r}
 #| label: MLR (with missingness)
 m1<- glm(diab ~ BMI_cat + age + gender + race,
-                       family = binomial, data = merged_data)  # quasi-complete separation
+                       family = binomial, data = merged_data, na.action=na.omit)  # quasi-complete separation
 
 m1
+plot(m1)
+head(na.action(m1))
+
 
 ```
+
+We see the first 6 rows that were deleted.
 
 ## Raw Data Exploration and Visualization
 
@@ -1003,14 +1000,14 @@ import pandas as pd
 
 ## Unexpected reports, patterns or anomalies in original data
 
--   We found quasi-complete separation issue (with 9799 observations
-    deletion and resulting complete cases (n=14). The original data
-    could not be analysed further because of "complete separation” or
-    “quasi-complete separation”. With sparse data as some categories had
-    very few observations, the resulting imbalance in the outcome (very
-    few cases of 0 or 1) it emphasized strong predictors that almost
-    perfectly separate outcomes,d and the combination resulted in empty
-    cells on cross-tabulation.
+-   We found quasi-complete separation issue due to 9799 observations
+    dropped and resulting less number of complete cases (n=14). The
+    model is overfitted to this subset and cannot generalize. Huge
+    coefficients (e.g., 94, –50, 73) and the tiny residual deviance
+    suggest perfect separation and sparse data in some categories with
+    very few observations,resulted in imbalance in the outcome (very few
+    cases of 0 or 1) and Logistic regression cannot estimate stable
+    coefficients when predictors perfectly classify the outcome.
 -   Summary, counts and ratios of gender, race levels and BMI levels and
     counts of having diabetes are presented.
 
@@ -1039,16 +1036,14 @@ table(merged_data$gender, merged_data$diab, useNA="ifany")
 
 ```
 
--   Visulaization of the original data -
+-   **Visulaization of the original merged data**
 
-    -   Cross-tabulation between BMI and diabetes status resulted only
-        14 complete cases with higher number reporting having diabetes
-        (10/14) -
+    -   Cross-tabulation between BMI and diabetes status with 14
+        complete cases.
 
-    -   Box-plot for age and diabetes status - higher number of
-        population had diabetes in the age range of \< 20 years.
-
-    -   Age distribution presented in the graph.
+    -   Box-plot for age and diabetes status showed higher number of
+        population having diabetes were in the age range of \< 20 years.
+        Presented here is the age distribution graph.
 
 ```{r}
 #| label: Visualizationof Raw Data
@@ -1141,31 +1136,56 @@ ggplot(merged_data) +
   
 ```
 
-Multivariate Imputation by Chained Equations (MICE) @JSSv045i03
+**Considering the challenges observed in the original and imputed
+dataset (mentioned below)**
 
--   Because of quasi complete data issue, Multiple Imputation (MI)
-    performed on merged data for missingness in the predictor (BMI) and
-    in the response variable (diabetes status).
--   A Bayesian Approach in the popular mice package in R to add sampling
-    variability to the imputations, Iterative Imputation (MICE) imputes
-    missing values one variable at a time, using regression models based
-    on the other variables in the dataset. This chain process, with each
-    imputed variable becoming a predictor for the subsequent imputation
-    and the entire process is repeated multiple times to create several
-    complete datasets, each reflecting different possibilities for the
-    missing data. Each variable is imputed using its own appropriate
-    univariate regression model.
--   Imputation resulted in filling imputed values and resulted dataset
-    had 9813 observations with no NAs. The imputed data was analyzed and
-    summarised as below.
--   A comparative bar plot of the original merged data and the imputed
-    data is presented below.
--    A heatmap generated correltaion between **BMI categories** and
-    **Diabetes status.** BMI dummy variables are strongly **negatively
-    correlated and there is** no strong linear association between BMI
-    category and diabetes in your dataset. Since bothe being categorical
-    the chi-square calculation shows (p-value = 0.5461) is \> 0.05 with
-    no evidence of association.
+1.  Small sample size with very few diabetics in the "Underweight" BMI
+    group.
+
+2.  Logistic regression estimates with huge standard errors.
+
+3.  Imbalanced outcome MLE estimation, which can be biased.
+
+4.  Quasi-separation in the data after listwise deletion.
+
+5.  Data with a predictor perfectly predicting diabetes (e.g., all obese
+    participants are diabetic in your subset), where frequentist
+    regression fails.
+
+We decided to perform **Multivariate Imputation by Chained Equations
+(MICE)** @JSSv045i03
+
+**Multivariate Imputation by Chained Equations (MICE)**
+
+-   Multiple Imputation (MI) was considered to handle missingness in the
+    predictor (BMI) and in the response variable (diabetes status) in
+    the model.
+
+-   Multiple Imputation (MI) is a Bayesian Approach and is the popular
+    mice package in R. It adds sampling variability to the imputations.
+    Iterative Imputation (MICE) imputes missing values of one variable
+    at a time, using regression models based on the other variables in
+    the dataset. This is a chain process, with each imputed variable
+    becoming a predictor for the subsequent imputation and the entire
+    process is repeated multiple times to create several complete
+    datasets, each reflecting different possibilities for the missing
+    data. Each variable is imputed using its own appropriate univariate
+    regression model.
+
+    **Results from MICE:**
+
+-   Performing Imputation resulted in filling imputed values resulting
+    in 9813 observations with no NAs. A comparative bar plot on
+    missingness in the original merged data and the imputed data is
+    presented below.
+
+-    A heatmap of the imputed dataset generated correlation between
+    **BMI categories** and **Diabetes status.** BMI dummy variables are
+    strongly **negatively correlated, and there is** no strong linear
+    association between BMI category and diabetes in your dataset. Since
+    both are categorical the chi-square calculation resulted in p-value
+    = 0.5461, which is \> 0.05 showing no evidence of association.
+    Summary and bar plots of the imputed dataset are presented here.
 
 ```{r}
 #| label: MICE
@@ -1232,77 +1252,56 @@ print(tab)
 chisq.test(tab)
 ```
 
-In our dataset, we found challenges such as:
+**Bayesian data augmentation and MCMC sampling**
 
--   Small sample size with very few diabetics in the "Underweight" BMI
-    group.
+-   Bayesian augmentation stabilizes estimates via priors and provides
+    finite, interpretable estimates and provide more reliable
+    inferences.
 
--   Logistic regression estimates may give huge standard errors.
+-   Encoding prior beliefs helps in predicting estimates when data are
+    sparse. Bayesian gives full probability statements instead of only
+    Odds Ratio (OR) with 94% probabilistic results (credible intervals),
+    and not just p-values. Prior knowledge from literature suggests
+    obesity is linked to diabetes.
 
--   Rare events such as imbalanced outcome MLE estimation can be biased.
+-   On comparing results from MI vs Bayesian data augmentation with MCMC
+    sampling, MI is a frequentist approach, requires no priors, has
+    moderate flexibility, it handles missing values first by imputation,
+    performs regression analysis, pools results, and propagate
+    uncertainty added after analysis (pooling).
 
--   We found separation problem in the data after listwise deletion.
-
--   Our data resulted in a predictor perfectly predicting diabetes
-    (e.g., all obese participants are diabetic in your subset), where
-    frequentist regression fails.
-
-Bayesian data augmentation and MCMC sampling
-
--   We found Bayesian augmentation is best analytic procedure for our
-    data. Bayesian methods shrink extreme estimates back toward
-    plausible values.
-
--   Augmentation stabilizes estimates via priors. Bayesian augmentation
-    with priors provides finite, interpretable estimates. Encoding prior
-    belief could help in predicting estimates when data are sparse.
-    Bayesian augmentation could help prevent unstable estimates and
-    provide more reliable inferences.
-
--   It gives a full probability statements instead of only Odds ratio.
-    Bayesian provides 94% probabilitic results (credible intervals), not
-    just p-values. Prior knowledge matters as literature already
-    suggests obesity is linked to diabetes.
-
--   On comparing MI vs Bayesian data augmentation and MCMC sampling. MI
-    is a frequentist approach, requires no priors, has moderate
-    flexibilty, handling of missing values by first impute then analyze,
-    then pool and propagation of uncertainty is added after analysis
-    (pooling).
-
--   We conduct Bayesian data augmentation and MCMC sampling from the
-    joint posterior (both regression coefficients and the missing
-    values) for Bayesian logistic regression.
-
--   Bayesian data augmentation performs both the and the regression
-    model fitting happening simultaneously, and Markov Chain Monte
+-   Bayesian data augmentation performs missing data imputation and
+    regression model fitting simultaneously, and Markov Chain Monte
     Carlo (MCMC) technique draws samples from the joint posterior of
     regression parameters and missing values and provides complete
     datasets by extracting posterior means, credible intervals, and
-    probabilities.
+    probabilities. This technique handles uncertainty in missing values
+    fully propagated through the model, naturally handles small or
+    sparse datasets and separation problems.
 
--   This technique handles uncertainty in missing values fully
-    propagated through the model, naturally handles small or sparse
-    datasets and separation problems. It includes informative priors on
-    coefficients as well.
+    Bayesian augmentation was performed on the data with missingness, as
+    the the best analytic procedure to shrink extreme estimates back
+    toward plausible values. After we conducted Bayesian data
+    augmentation, an MCMC sampling resulted from the joint posterior.
 
 ##    Modeling 
 
-(1) We first performed MI and then run multiple logistic regression on
-    imputed dataset (MI) as above.
+(1) First we performed MI and conducted multiple logistic regression on
+    imputed dataset (MI) as mentioned above.
 
-(2) Next, we conduct bayesian data augmentation and logistic regression.
+(2) Next, we conduct bayesian data augmentation and logistic regression
+    on data with missignenss,
 
-(3) Lastly, we compare model developed on raw data, imputed (MICE) data
-    and Bayesian augmention model.
+(3) Lastly, we compare alll models (model on raw data, imputed (MICE)
+    data and Bayesian augmention.
 
     ## **Results** 
 
-We present key findings Bayesian data augmentaton and regression through
-visualization
+We present key findings of Bayesian data augmentaton and regression
+through visualization
 
 (1) Modeling assumption check
-(2) Correlation matrix, cooks distance, influential points
+(2) Correlation matrix, Cook's distance, influential points
 (3) Model plot
 
 ```{r}
@@ -1402,7 +1401,7 @@ table(as.numeric(Imputed_data1$diab), useNA = "ifany")
 
 ```
 
-Findings from regression of MI data set and Bayesian data augmentation:
+Findings from regression of MI data set
 
 1.  MLR on imputed data (Frequentist approach)
 
@@ -1426,14 +1425,23 @@ Findings from regression of MI data set and Bayesian data augmentation:
 
 -   Graph shows Residual vs fitted (imputed data model)
 
-2.  Bayesian Data Augmentation and logistic regression approach
+2.  Results from Bayesian Data Augmentation and logistic regression
 
 -   We incorporate prior knowledge that BMI increases diabetes odds by
     .,
--   We use priors and Bayesian logistic regression and compare the
+-   We use priors for Bayesian logistic regression and compare the
     models with different priors in the model
-    -   Weak prior N (0,2.5)
-    -   informative prior from previous studies N(
+    -   Prior (intercept) - We use intercept prior from this study data
+    -   Prior (coefficients) - BMI, age, gender
+        -   Weak prior N (0,2.5) -βBMI∼N(μ,σ2)
+        -   A common approach is to use a normal distribution,
+            βBMI∼N(μ,σ2), for the regression coefficient. 
+        -   informative prior from previous studies βBMI∼N(μ,σ2) ,
+            βage∼N(μ,σ2), βgender∼N(μ,σ2), βrace ∼N(μ,σ2)
+
+For males, the informative prior @Ali2024, we use is
+
+Normal(μ = 1.705, σ² = 0.448²).
 
 ```{r}
 #| label: m1 vs m2
@@ -1444,12 +1452,11 @@ Findings from regression of MI data set and Bayesian data augmentation:
 m1 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
     family = binomial, data = merged_data)
 
-
 # Model (classic, imputed data)
 m2 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
     family = binomial, data = Imputed_data1)
 
-m3
+print(m2)
 
 
 m1
@@ -1466,7 +1473,10 @@ adjR2(m2)
       qqPlot(residual_imputed1, main = "Figure 13. Q-Q Plot of Residuals")
 ```
 
-mi = race is significant m2= age, race, gender
+In m1 = race is a significant predictor
+
+In m2 = age is strongly significant, race, and gender are slightly
+significant predictors
 
 ```{r}
 #| label: Bayesian augmentation MCMC
@@ -1476,10 +1486,18 @@ mi = race is significant m2= age, race, gender
 library(brms)
 library(GGally)
 
-## merged data before augmentation
+## correlation observed in the merged data before augmentation
 
-merged_data_corr <- merged_data %>% select(age, BMI_cat, gender, race)
+merged_data_corr <- merged_data %>% select(diab, age)
 pairs(merged_data_corr)
+
+merged_data_corr <- merged_data %>% select(diab, BMI_cat)
+pairs(merged_data_corr)
+
+
+merged_data_corr1 <- merged_data %>% select(BMI_cat, gender, race)pairs(merged_data_corr)
+
+
 
 ## Bayesian data augmentation and regression both together #
 
@@ -1553,9 +1571,6 @@ imputed_modes <- apply(imputed_BMI[, is.na(merged_data$BMI_cat)], 2, function(x)
 # Fit Bayesian logistic regression with data augmentation
 
 
-
-
-
 fit_bayes <- brm(
   formula =form_all,
   data = merged_data,
@@ -1567,6 +1582,12 @@ fit_bayes <- brm(
 
 summary(fit_bayes)
 ```
+
+-   **The cluster of points representing the higher probability of
+    diabetes appears to be denser among individuals in the middle to
+    older age ranges (e.g., roughly from 40 to 80 years old)**, compared
+    to the younger age ranges, although diabetes is present even at
+    younger ages.
 
 ### Conclusion
 
