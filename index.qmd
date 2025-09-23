@@ -975,6 +975,9 @@ library(knitr) # fancy table
 library(tidyverse) # load library tidyverse
 library(classpackage)
 library(ggplot2)
+library(dplyr)
+
+
 
 # Age distribution
 ggplot(merged_data, aes(x = age)) +
@@ -1067,11 +1070,10 @@ health datasets (plot below shows missingness)
 
 **Firth (penalized) regression**
 
-**Firth (penalized) regression** handles quasi-separation, @DAngelo2025,
-and the results from Firth regression shows all coefficients as finite,
-but sample size was reduced (n= 14). The estimates were highly
-uncertain, and have wide confidence intervals that cannot make strong
-claims about predictor effects.
+Firth regression, a frquestist approach use Jeffreys prior for bias
+correction. It does not provide posterior and no sampling using MCMC (as
+in contrast to bayesian logisitic regression). Firth (penalized)
+regression was considered to handle quasi-separation, @DAngelo2025.
 
 ```{r}
 #| label: MLR (with missingness)
@@ -1127,24 +1129,9 @@ import pandas as pd
 
 ## Analysis and Results
 
-## Unexpected reports, patterns or anomalies in original data
+## Unexpected reports, patterns or anomalies in raw **data**
 
-**Challenges** observed in the original data
-
--   Small sample size with very few diabetics in the "Underweight" BMI
-    group.
-
--   Logistic regression estimates with huge standard errors.
-
--   Imbalanced outcome MLE estimation, which can be biased.
-
--   Quasi-separation in the data after listwise deletion.
-
--   Data with a predictor perfectly predicting diabetes (e.g., all obese
-    participants are diabetic in your subset), where frequentist
-    regression fails.
-
-**Linear regression (raw data) -**
+**Linear regression and challenges of raw data**
 
 -   We found quasi-complete separation in the raw data (9799
     observations dropped)
@@ -1152,57 +1139,50 @@ import pandas as pd
 -   The model is overfitted to this subset and cannot be generalized.
 -   Huge coefficients (e.g., 94, –50, 73) and the tiny residual deviance
     suggest perfect separation and sparse data in some categories with
-    very few observations,resulted in imbalance in the outcome (very few
-    cases of 0 or 1).
+    very few observations, resulted in imbalance in the outcome (very
+    few cases of 0 or 1).
 -   Logistic regression cannot estimate stable coefficients when
     predictors perfectly classify the outcome.
 
-**Firth regression (raw data) -**
+**Firth regression (raw data) handled** quasi-separation with
+coefficients as finite, but the sample size was reduced (n= 14) where
+estimates are highly uncertain, wide confidence intervals → cannot make
+strong claims about predictor effects.
 
--   coefficients as finite, but the sample size was reduced (n= 14)
-    where estimates are highly uncertain, wide confidence intervals →
-    cannot make strong claims about predictor effects.
--   Firth regressionis a frquestist approach where Jeffreys prior is
-    added for bias correction. It does not provide posterior and no
-    sampling using MCMC (as in contrast to bayesian logisitic
-    regression). To avoid sample loss and potential bias in subsequent
-    analyses, we considered multiple imputation (MI) as an alternative
-    approach for the given dataset.
+**Multivariate Imputation by Chained Equations (MICE)** @JSSv045i03
 
-**Multivariate Imputation by Chained Equations (MICE)**
+To avoid sample loss and potential bias in subsequent analyses, we
+considered multiple imputation (MI) as an alternative approach for the
+given raw dataset. Flatness of the density, heavy tails, non-zero
+peakedness, skewness and multimodality do not hamper the good
+performance of multiple imputation for the mean structure in samples n
+\> 400, even for high percentages (75%) of missing data in one variable
+\@@van2012flexible. Multiple Imputation (MI) is a Bayesian Approach (use
+popular mice package in R) and adds sampling variability to the
+imputations. Iterative Imputation (MICE) imputes missing values of one
+variable at a time, using regression models based on the other variables
+in the dataset. This is a chain process, with each imputed variable
+becoming a predictor for the subsequent imputation and the entire
+process is repeated multiple times to create several complete datasets,
+each reflecting different possibilities for the missing data. Each
+variable is imputed using its own appropriate univariate regression
+model.
 
-Flatness of the density, heavy tails, non-zero peakedness, skewness and
-multimodality do not hamper the good performance of multiple imputation
-for the mean structure in samples n \> 400, even for high percentages
-(75%) of missing data in one variable \@@van2012flexible. We performed
-Multivariate Imputation by Chained Equations (MICE) @JSSv045i03
-
-Multiple Imputation (MI) on raw data was considered to handle
-missingness in the predictor (BMI) and in the response variable
+We performed Multivariate Imputation by Chained Equations (MICE) to
+handle missingness in the predictor (BMI) and in the response variable
 (diabetes status).
-
-Multiple Imputation (MI) is a Bayesian Approach (use popular mice
-package in R) and adds sampling variability to the imputations.
-
-Iterative Imputation (MICE) imputes missing values of one variable at a
-time, using regression models based on the other variables in the
-dataset. This is a chain process, with each imputed variable becoming a
-predictor for the subsequent imputation and the entire process is
-repeated multiple times to create several complete datasets, each
-reflecting different possibilities for the missing data. Each variable
-is imputed using its own appropriate univariate regression model.
 
 **Results from MICE:**
 
--   Performing MI on raw data resulted in filling imputed values with
-    resulting 9813 observations with no NAs. A comparative bar plot on
-    missingness in the raw data and the imputed data is presented below.
+-   MI on raw data resulted in filling imputed values with resulting
+    9813 observations with no NAs. A comparative bar plot on missingness
+    in the raw data and the imputed data is presented below.
 
 -   A heatmap of the imputed dataset generated a correlation between
     **BMI categories** and **Diabetes status.** BMI dummy variables are
     strongly **negatively correlated.**
 
--   **there was** no strong linear association between BMI category and
+-   **There was** no strong linear association between BMI category and
     diabetes in the dataset. Chi-square calculation of categorical
     varaibels revealed p-value = 0.5461, which is \> 0.05 with no
     evidence of association.
@@ -1245,7 +1225,8 @@ marginplot(
   pch = 19
 )
 
-# Check if missingness is gone
+# Checking missingness in imputed data
+
 summary(Imputed_data1)
 colSums(is.na(Imputed_data1))  # check total missing values
 
@@ -1271,36 +1252,25 @@ print(tab)
 chisq.test(tab)
 ```
 
-## Modeling
+## Modeling 
 
--   Initially we conducted a Linear regression model on raw data
+Bayesian data augmentation and Logistic regression @Austin2021
 
--   To overcome perfect fitting issues we conducted Firth regression.
+For the given raw dataset, Bayesian logistic Regression (GLM) is
+considered to calculate the probability of having Diabetes by
+incorporated default prior and using Bernoulli likelihood with a logit
+link is the standard, interpretable model for risk b.
 
--   To resolve the small sample size, we performed MI and conducted
-    multiple logistic regression on the ,imputed dataset
+1.  Priors - Bayesian augmentation stabilizes estimates via priors and
+    provides finite, interpretable estimates and provides more reliable
+    inferences.
 
--   Next, we conduct bayesian data augmentation and logistic regression
-    on data with missignenss.
+    -   Shrinkage is possible when including predictors (BMI, age,
+        gender, race )
 
--   Lastly, we compare
-
-    -   Linear regression model on raw data
-
-    -   Bayesian logistic regression on imputed dataset (MI)
-
-    -   Bayesian data augmention and logistic regression
-
-For the given dataset, we use Bayesian logistic Regression (GLM) to
-calculate the probability of having Diabetes. We incorporate default
-prior for Bayesian logistic for Diabetes (Binary response variable),
-using Bernoulli likelihood with a logit link is the standard,
-interpretable model for risk b.
-
-1.  By adding Priors - • Shrinkage is possible when including predictors
-    (BMI, age, gender, race ). • Clinical beliefs (e.g., positive
-    association for age/BMI, protective for HDL) can be encoded as
-    priors to stabilize estimates and improve calibration
+    -   Encoding prior beliefs predicts estimates when data are sparse
+        (Prior knowledge from literature suggests obesity is linked to
+        diabetes)
 
 2.  Bayesian modeling plays nicely with multiple imputation or joint,
     propagating uncertainty instead of silently dropping cases.
@@ -1317,7 +1287,9 @@ interpretable model for risk b.
     calculated posterior rather than refitting from scratch, developing
     a live risk model.
 
-Bayesian MI and Bayesian Logistic regression @Austin2021
+6.  Bayesian gives full probability statements instead of only Odds
+    Ratio (OR) with 94% probabilistic results (credible intervals), and
+    not just p-values.
 
 *The Logistic regression model is:*
 
@@ -1327,48 +1299,38 @@ $$ \text{logit}(P(Y_i=1)) = \beta_0 + \beta_1 \cdot Age_i + \beta_2 \cdot BMI_i 
 
 $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$
 
-**Bayesian data augmentation and MCMC sampling**
+**Comparision of multiple imputation and Bayesian data augmentation**
 
-To overcome small sample size and the other challenges in the raw data,
-we conducted Bayesian data augmentation and MCMC sampling
++---------------------------+---------------------------------------+
+| **Multiple imputation**   | **Bayesian data augmentation**        |
++===========================+=======================================+
+| -   frequentist approach  | -   performs missing data imputation  |
+|     and requires no       |     and regression model fitting      |
+|     priors, and has       |     simultaneously                    |
+|     moderate flexibility  |                                       |
+|                           | -   Markov Chain Monte Carlo (MCMC)   |
+|                           |     draws samples from the joint      |
+|                           |     posterior of regression           |
+|                           |     parameters, missing values and    |
+|                           |     provide complete datasets by      |
+|                           |     extracting posterior means,       |
+|                           |     credible intervals, and           |
+|                           |     probabilities                     |
++---------------------------+---------------------------------------+
+| -   handles missing       | -   performed on the data with        |
+|     values first by       |     missingness                       |
+|     imputation, performs  |                                       |
+|     regression analysis,  | -   shrink extreme estimates back     |
+|     pools results         |     toward plausible values           |
++---------------------------+---------------------------------------+
+| -   propagate uncertainty | -   handles uncertainty in missing    |
+|     added after analysis  |     values fully propagated through   |
+|     (pooling).            |     the model, naturally handles      |
+|                           |     small or sparse datasets and      |
+|                           |     separation problems.              |
++---------------------------+---------------------------------------+
 
--   Bayesian augmentation stabilizes estimates via priors and provides
-    finite, interpretable estimates and provides more reliable
-    inferences.
-
--   Encoding prior beliefs predicts estimates when data are sparse
-    (Prior knowledge from literature suggests obesity is linked to
-    diabetes)
-
--   Bayesian gives full probability statements instead of only Odds
-    Ratio (OR) with 94% probabilistic results (credible intervals), and
-    not just p-values.
-
-    **Comparing MI vs Bayesian data augmentation with MCMC sampling**
-
--   **MI** is a frequentist approach, requires no priors, has moderate
-    flexibility, it handles missing values first by imputation, performs
-    regression analysis, pools results, and propagate uncertainty added
-    after analysis (pooling).
-
--   **Bayesian data augmentation** performs missing data imputation and
-    regression model fitting simultaneously, and Markov Chain Monte
-    Carlo (MCMC) technique draws samples from the joint posterior of
-    regression parameters and missing values and provides complete
-    datasets by extracting posterior means, credible intervals, and
-    probabilities. This technique handles uncertainty in missing values
-    fully propagated through the model, naturally handles small or
-    sparse datasets and separation problems.
-
-    Bayesian augmentation was performed on the data with missingness, as
-    the the best analytic procedure to shrink extreme estimates back
-    toward plausible values. After we conducted Bayesian data
-    augmentation, an MCMC sampling resulted from the joint posterior.
-
-    ## **Results from** Bayesian data augmentaton and regression
-
-Key findings from Bayesian data augmentaton and regression through
-visualization
+**Diagnostics performed before regression analysis**
 
 (1) Modeling assumption check
 (2) Correlation matrix, Cook's distance, influential points
@@ -1658,6 +1620,14 @@ summary(fit_bayes)
     older age ranges (e.g., roughly from 40 to 80 years old)**, compared
     to the younger age ranges, although diabetes is present even at
     younger ages.
+
+**Comparing Models**
+
+-   Linear regression model on raw data
+
+-   Bayesian logistic regression on imputed dataset (MI)
+
+-   Bayesian data augmention and logistic regression
 
 ### Conclusion
 
