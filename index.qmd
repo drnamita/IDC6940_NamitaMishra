@@ -821,37 +821,37 @@ plot_histogram(merged_data$RIDAGEYR, title = "Figure 4. Histogram plots of numer
 plot_qq(merged_data$RIDAGEYR, title = "Figure 5. QQ plots to assess normality of numerical variables age.")
 
 
-
-
-
 ```
 
 ## Explain your data preprocessing and cleaning steps.
 
 Data Cleaning
 
-We explored the merged dataset for missing values (NA), special codes
-(7,9,77,99) and considering special codes are not random and cannot be
-dropped, based on variable (codebook) they were transformed into NAs,
-and missing values (NAs) were included in the analysis, since R
+The merged dataset exploration revealed missing values (NA), special
+codes (7,9,77,99) and considering special codes are not random and
+cannot be dropped, based on variable (codebook) they were transformed
+into NAs. Missing values (NAs) were included in the analysis, since R
 automatically excludes rows with NA via listwise deletion or complete
-case analysis during rgression. Listwise deletion of rows with missing
-data were silently dropped, leading to a reduction in sample size. We
-acknowledged that the procedure may introduce bias (MAR or MNAR), since
-informative missingness is ignored, so to avoid sample loss and
-potential bias in subsequent analyses, we considered multiple imputation
-(MI), we considered as an alternative approach. All NAs were summed and
-analyzed in the merged dataframe and complete case analysis was
-performed to create a clean dataframe.
+case analysis during regression.
 
-The bar plots in Figure 4 show frequency distributions for categories
-(BMI, gender, diabetes status, race). It appears that: Most cases are
-non-hispanic whites. Of those who reported diabetes status, more counts
-reported having diabetes. Gender are relatively evenly distributed.
-Majority population were in the normal BMI range.
+On running lm (), listwise deletion of rows, resulted in reduced sample
+size (n=14) which we acknowledged could introduce bias as the
+informative missingness is ignored (MAR or MNAR). The regression
+resullted in quasi-sepration (warning).
 
-Histograms in Figure 5 shows age frequency distributions with slight
-right skewness.
+## Raw Data Exploration and Visualization
+
+-   We explored raw data, performed basic statistics to report insights
+    through summary statistics, visualizations (histogram for continuous
+    variables), and bar plot for categorical variables).
+-   The bar plots in Figure 4 show frequency distributions for
+    categorical variables (BMI, gender, diabetes status, race). Findings
+    revealed most cases are non-hispanic whites. Of those who reported
+    diabetes status, more counts reported having diabetes. Genders are
+    relatively evenly distributed. Majority population were in the
+    normal BMI range.
+-   Histograms in Figure 5 show age (continuous) frequency distributions
+    with slight right skewness.
 
 ```{r message=FALSE, warning=FALSE}
 #| label: missing values_final data
@@ -873,10 +873,6 @@ sum(merged_data$SEQN  %in% missing_codes)
 
 
 ```
-
-After listwise deletion of NAs from the merged data, the clean data
-reported complete cases (n=14) and the sample size was reduced with
-resulting perfect (or quasi-perfect) separation.
 
 ```{r}
 #| include: false
@@ -907,9 +903,12 @@ sum(clean_data$race  %in% missing_codes)
 ```{r}
 plot_intro(clean_data, title="Figure 6. Breakdown of missing observations.")
 
+
+
+
 ```
 
-The clean data summary and the complete cases.
+The clean data summary
 
 ```{r}
 #| label: Clean dataset
@@ -922,8 +921,10 @@ colSums(is.na(clean_data))
 
 ```
 
-Multiple linear regression performed on merged (raw dataset) resulted in
-a reduced sample size.
+The merged data variables were recoded and special codes were included
+in NA category. The descriptive summary of the merged data are presented
+in tabulated format for continuous and categorical variables (counts,
+frequencies, proprotions mean and sd)
 
 ```{r}
 #| label: new columns
@@ -942,8 +943,9 @@ for (v in cols_to_clean) {if (is.character(merged_data[[v]]) || is.factor(merged
     }
   }
 
-# summary(merged_data)  ## no removal of NAs in merged_data 
+summary(merged_data)  ## no removal of NAs in merged_data 
                       # NAs are handled in the model 
+
 
 ```
 
@@ -952,8 +954,6 @@ for (v in cols_to_clean) {if (is.character(merged_data[[v]]) || is.factor(merged
 #| include: false
 
 # NAs present in RIDAGEYR,DIQ240,BMDBMIC# 
-
-# Multiple Logistic Regression with missingness (raw data)
 
 merged_data <- rename(merged_data,
        id = SEQN, # Respondent sequence number
@@ -967,88 +967,70 @@ merged_data <- rename(merged_data,
 ```
 
 ```{r}
-#| label: MLR (with missingness)
-m1<- glm(diab ~ BMI_cat + age + gender + race,
-                       family = binomial, data = merged_data, na.action=na.omit)  # quasi-complete separation
-
-m1
-plot(m1)
-head(na.action(m1))
 
 
-```
+library(dplyr)
 
-We see the first 6 rows that were deleted.
+# 1. Response variable distribution
+diab_summary <- merged_data %>%
+  count(diab) %>%
+  mutate(Proportion = round(n / sum(n), 3)) %>%
+  rename(Category = diab, Count = n) %>%
+  mutate(Variable = "Diabetes Status") %>%
+  select(Variable, Category, Count, Proportion)
 
-## Raw Data Exploration and Visualization
+# 2. Continuous predictors (example: age)
+cont_summary <- merged_data %>%
+  summarise(
+    Mean = mean(age, na.rm = TRUE),
+    SD   = sd(age, na.rm = TRUE),
+    Min  = min(age, na.rm = TRUE),
+    Max  = max(age, na.rm = TRUE)
+  ) %>%
+  mutate(Variable = "Age") %>%
+  select(Variable, everything())
 
--   We explored raw data, performed basic statistics to report insights
-    through summary statistics, visualizations (histogram for continuous
-    variables), and bar plot for categorical variables).
+# 3. Function for categorical variables
+cat_summary <- function(df, var, name) {
+  df %>%
+    count({{var}}) %>%
+    mutate(Proportion = round(n / sum(n), 3),
+           Variable = name) %>%
+    rename(Category = {{var}}, Count = n) %>%
+    select(Variable, Category, Count, Proportion)
+}
 
-```{python}
-import pandas as pd
+gender_summary <- cat_summary(merged_data, gender, "Gender")
+BMI_summary    <- cat_summary(merged_data, BMI_cat, "BMI Category")
+race_summary   <- cat_summary(merged_data, race, "Race")
 
+# 4. Combine all into one table
+final_table <- bind_rows(
+  diab_summary,
+  cont_summary,
+  gender_summary,
+  BMI_summary,
+  race_summary
+)
 
-
-
-
-
-```
-
-## Analysis and Results
-
-## Unexpected reports, patterns or anomalies in original data
-
--   We found quasi-complete separation issue due to 9799 observations
-    dropped and resulting less number of complete cases (n=14). The
-    model is overfitted to this subset and cannot generalize. Huge
-    coefficients (e.g., 94, –50, 73) and the tiny residual deviance
-    suggest perfect separation and sparse data in some categories with
-    very few observations,resulted in imbalance in the outcome (very few
-    cases of 0 or 1) and Logistic regression cannot estimate stable
-    coefficients when predictors perfectly classify the outcome.
--   Summary, counts and ratios of gender, race levels and BMI levels and
-    counts of having diabetes are presented.
-
-```{r warning=FALSE}
-#| label: Summary statistics of variables
-#| echo: true
-
-# Numeric summary for age
-summary(merged_data$age)
-summary(merged_data$gender)
-summary(merged_data$race)
-summary(merged_data$BMI_cat)
-summary(merged_data$diab)
-
-# Proportions
-prop.table(table(merged_data$diab))
-prop.table(table(merged_data$BMI_cat))
-prop.table(table(merged_data$gender))
-prop.table(table(merged_data$race))
-
-colSums(is.na(merged_data))
-
-table(merged_data$diab, merged_data$BMI_cat)
-table(merged_data$BMI_cat, merged_data$diab, useNA="ifany") # before cleaning and imputation
-table(merged_data$gender, merged_data$diab, useNA="ifany")
 
 ```
-
--   **Visulaization of the original merged data**
-
-    -   Cross-tabulation between BMI and diabetes status with 14
-        complete cases.
-
-    -   Box-plot for age and diabetes status showed higher number of
-        population having diabetes were in the age range of \< 20 years.
-        Presented here is the age distribution graph.
 
 ```{r}
-#| label: Visualizationof Raw Data
-#| echo: true
 
+# corss-tabulation #
+
+table(merged_data$diab, merged_data$BMI_cat,useNA="ifany")
+table(merged_data$race, merged_data$diab, useNA="ifany") # before cleaning and imputation
+table(merged_data$gender, merged_data$diab, useNA="ifany")
+
+# Print with title
+kable(final_table, caption = "Table 1. Descriptive Statistics of Study Variables")
+```
+
+```{r}
+#| label: Data vizualization
+#| 
 # load a libraries
 library(knitr) # fancy table
 library(tidyverse) # load library tidyverse
@@ -1131,7 +1113,127 @@ ggplot(merged_data) +
 
 ggplot(merged_data) + 
     geom_freqpoly(aes(x = age), binwidth = 5, na.rm = TRUE)  # age distribution#
+```
 
+**Multiple logistic regression**
+
+We conducted Multiple linear regssion on our dataset and we see the
+(presented are first 6 deleted rows) listwise deletion resulted in small
+sample size.
+
+After complete case analysis, listwise deletion of NAs, resulted in
+perfect (or quasi-perfect) separation. @van2012flexible. The deatils of
+the missingness (plot below) revealed the cause of missingness (MAR and
+MNAR) which we found are common in healthcare and public health
+datasets.
+
+**Firth (penalized) regression**
+
+Since **Firth (penalized) regression** handles quasi-separartion,
+@DAngelo2025, we conducted firth regression. Results from Firth
+regression conducted for quasi sepration shows all coefficients as
+finite, but the sample size was reduced (n= 14) where estimates are
+highly uncertain, wide confidence intervals → cannot make strong claims
+about predictor effects.
+
+```{r}
+#| label: MLR (with missingness)
+
+
+m_raw<- glm(diab ~ BMI_cat + age + gender + race,
+                       family = binomial, data = merged_data)  
+
+ # quasi-complete separation #
+
+m_raw
+plot(m_raw)
+head(na.action(m_raw))
+
+
+library(logistf) # penalized regression #
+
+# Firth logistic regression
+m_firth <- logistf(diab ~ BMI_cat + age + gender + race,
+                   data = merged_data)
+
+# Summary of results
+summary(m_firth)
+
+# Odds ratios and 95% CIs
+exp(coef(m_firth))
+exp(confint(m_firth))
+
+
+```
+
+```{r}
+#| label: ex_models
+#| eval: false
+#| include: false
+m01<- glm(diab ~ BMI_cat, 
+                       family = binomial, data = merged_data, na.action=na.omit)
+m02<- glm(diab ~ BMI_cat + age, 
+                       family = binomial, data = merged_data, na.action=na.omit)
+m03<- glm(diab ~ BMI_cat + race, 
+                       family = binomial, data = merged_data, na.action=na.omit)
+```
+
+```{python}
+import pandas as pd
+
+
+
+
+
+
+```
+
+## Analysis and Results
+
+## Unexpected reports, patterns or anomalies in original data
+
+-   We found quasi-complete separation in the raw data (9799
+    observations dropped)
+-   Reduced sample size with less number of complete cases (n=14).
+-   The model is overfitted to this subset and cannot be generalized.
+-   Huge coefficients (e.g., 94, –50, 73) and the tiny residual deviance
+    suggest perfect separation and sparse data in some categories with
+    very few observations,resulted in imbalance in the outcome (very few
+    cases of 0 or 1).
+-   Logistic regression cannot estimate stable coefficients when
+    predictors perfectly classify the outcome.
+-   Firth regression - coefficients as finite, but the sample size was
+    reduced (n= 14) where estimates are highly uncertain, wide
+    confidence intervals → cannot make strong claims about predictor
+    effects.
+    -   Firth regressionis a frquestist approach where Jeffreys prior is
+        added for bias correction. It does not provide posterior and no
+        sampling using MCMC (as in contrast to bayesian logisitic
+        regression). To avoid sample loss and potential bias in
+        subsequent analyses, we considered multiple imputation (MI) as
+        an alternative approach for the given dataset.
+
+```{r warning=FALSE}
+#| label: Summary statistics of variables
+#| echo: true
+
+# Numeric summary for age
+
+
+```
+
+-   **Visualization of the raw data**
+
+    -   Cross-tabulation between BMI and diabetes status with 14
+        complete cases.
+
+    -   Box-plot for age and diabetes status showed higher number of
+        population having diabetes were in the age range of \< 20 years.
+        Presented here is the age distribution graph.
+
+```{r}
+#| label: Visualizationof Raw Data
+#| echo: true
 
   
 ```
@@ -1152,10 +1254,15 @@ dataset (mentioned below)**
     participants are diabetic in your subset), where frequentist
     regression fails.
 
-We decided to perform **Multivariate Imputation by Chained Equations
-(MICE)** @JSSv045i03
+Flatness of the density, heavy tails, non-zero peakedness, skewness and
+multimodality do not appear to hamper the good performance of multiple
+imputation for the mean structure in samples n \> 400, even for high
+percentages (75%) of missing data in one variable.\@@van2012flexible
 
 **Multivariate Imputation by Chained Equations (MICE)**
+
+We decided to perform Multivariate Imputation by Chained Equations
+(MICE) @JSSv045i03
 
 -   Multiple Imputation (MI) was considered to handle missingness in the
     predictor (BMI) and in the response variable (diabetes status) in
@@ -1179,8 +1286,8 @@ We decided to perform **Multivariate Imputation by Chained Equations
     missingness in the original merged data and the imputed data is
     presented below.
 
--    A heatmap of the imputed dataset generated correlation between
-    **BMI categories** and **Diabetes status.** BMI dummy variables are
+-   A heatmap of the imputed dataset generated correlation between **BMI
+    categories** and **Diabetes status.** BMI dummy variables are
     strongly **negatively correlated, and there is** no strong linear
     association between BMI category and diabetes in your dataset. Since
     both are categorical the chi-square calculation resulted in p-value
@@ -1284,7 +1391,7 @@ chisq.test(tab)
     toward plausible values. After we conducted Bayesian data
     augmentation, an MCMC sampling resulted from the joint posterior.
 
-##    Modeling 
+## Modeling
 
 (1) First we performed MI and conducted multiple logistic regression on
     imputed dataset (MI) as mentioned above.
@@ -1295,7 +1402,7 @@ chisq.test(tab)
 (3) Lastly, we compare alll models (model on raw data, imputed (MICE)
     data and Bayesian augmention.
 
-    ## **Results** 
+    ## **Results**
 
 We present key findings of Bayesian data augmentaton and regression
 through visualization
@@ -1312,27 +1419,27 @@ through visualization
 # assumption check (# for correlation # )
 # correlation matrix
 
-m2 <- glm(diab ~ age + gender + race + BMI_cat,
+m_imp1 <- glm(diab ~ age + gender + race + BMI_cat,
           data = Imputed_data1, 
           family = binomial)
-m2
+m_imp1
 
 # Get the predicted logit
-Imputed_data1$logit <- predict(m2, type = "link")  # 'link' gives log-odds
+Imputed_data1$logit <- predict(m_imp1, type = "link")  # 'link' gives log-odds
 
 # Plot BMI vs logit
 
-plot2 <- ggplot(Imputed_data1, aes(x = age, y = logit)) +
+plot_imp1 <- ggplot(Imputed_data1, aes(x = age, y = logit)) +
   geom_point(alpha = 0.3) +
   geom_smooth(method = "loess") +
   labs(x = "RIDAGEYR", y = "Log-odds of Diabetes")
 
-  plot2   
+ plot_imp1  
   
  
 # Calculate fitted values and residuals from the final model
-    fitted_imputed1 <- fitted(m2)
-    residual_imputed1 <- residuals(m2)
+    fitted_imputed1 <- fitted(m_imp1)
+    residual_imputed1 <- residuals(m_imp1)
   
 
 #Implication for modeling:
@@ -1340,22 +1447,22 @@ plot2 <- ggplot(Imputed_data1, aes(x = age, y = logit)) +
 # collinearity check #
 
 library(car)
-    vif(m2)  # VIF > 5 or 10 indicates multicollinearity 
+    vif(m_imp1)  # VIF > 5 or 10 indicates multicollinearity 
 
 # Check for influential points and outliers # 
 library(broom)
-    influence_m2 <- broom::augment(m2)
-    influence_m2
+    influence_m_imp1 <- broom::augment(m_imp1)
+    influence_m_imp1
 
     Imputed_data1 <- Imputed_data1 %>%
-    mutate(outlier =  if_else(abs(rstandard(m2))>2.5, "Suspected", "Not Suspected"))
+    mutate(outlier =  if_else(abs(rstandard(m_imp1))>2.5, "Suspected", "Not Suspected"))
 
     Imputed_data1 %>% count(outlier)
 
-    cooks(m2)
+    cooks(m_imp1)
 
 # Visualization 
-ggplot(influence_m2, aes(x = .hat, y = .cooksd)) +
+ggplot(influence_m_imp1, aes(x = .hat, y = .cooksd)) +
   geom_point() +
   labs(x = "Leverage", y = "Cook's Distance")
 
@@ -1370,17 +1477,17 @@ Imputed_data1 %>% ggplot(aes(x = BMI_cat, y = diab, color = outlier)) +
 Imputed_data1$diab_num <- ifelse(Imputed_data1$diab == "Yes", 1, 0)
 
 library(ResourceSelection)
-hoslem.test(Imputed_data1$diab_num, fitted(m2))
-summary(m2)
+hoslem.test(Imputed_data1$diab_num, fitted(m_imp1))
+summary(m_imp1)
 
 
-anova (m2)
+anova (m_imp1)
 library(glmtoolbox)
-(adjR2(m2))
+(adjR2(m_imp1))
 
-# plot- m1 and m3 # residual vs fitted #
+# plot- m_raw and m3 # residual vs fitted #
 
-plot3 <- plot(m2$fitted.values, resid(m2),   ## residual vs fitted plot - imputed data ##
+plot3 <- plot(m_imp1$fitted.values, resid(m_imp1),   ## residual vs fitted plot - imputed data ##
      xlab = "Fitted values",
      ylab = "Residuals",
      main = "Residuals vs Fitted",
@@ -1388,7 +1495,7 @@ plot3 <- plot(m2$fitted.values, resid(m2),   ## residual vs fitted plot - impute
 abline(h = 0, col = "red", lwd = 2)
 
 
-plot1 <- plot(m1$fitted.values, resid(m1),   ## residual vs fitted plot -  raw data ##
+plot1 <- plot(m_raw$fitted.values, resid(m_raw),   ## residual vs fitted plot -  raw data ##
      xlab = "Fitted values",
      ylab = "Residuals",
      main = "Residuals vs Fitted",
@@ -1444,30 +1551,30 @@ For males, the informative prior @Ali2024, we use is
 Normal(μ = 1.705, σ² = 0.448²).
 
 ```{r}
-#| label: m1 vs m2
+#| label: m_raw vs m_imp1
 #| eval: false
 #| include: false
 
 # Model (classic, raw data)
-m1 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
+m_raw <- glm(diab ~ age + BMI_cat + race + gender                                   , 
     family = binomial, data = merged_data)
 
 # Model (classic, imputed data)
-m2 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
+m_imp1 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
     family = binomial, data = Imputed_data1)
 
-print(m2)
+print(m_imp1)
 
 
-m1
-m2
+m_raw
+m_imp1
 m3
 
-anova(m1)
-anova(m2)
+anova(m_raw)
+anova(m_imp1)
 
-adjR2(m1)
-adjR2(m2)
+adjR2(m_raw)
+adjR2(m_imp1)
 
  # Q-Q Plot
       qqPlot(residual_imputed1, main = "Figure 13. Q-Q Plot of Residuals")
