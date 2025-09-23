@@ -17,6 +17,10 @@ editor:
   markdown: 
     wrap: 72
 ---
+Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
+to edit)
+
+---
 
 ## Literature Review
 
@@ -43,15 +47,14 @@ How is it solved?
 Use of Electronic Health Records (EHRs) with improved the diagnostic
 accuracy and predicts treatment effects. Visualizations of posterior
 distributions to help clinicians and patients to make their decision.
+
 Combining prior knowledge and patient data with evidence predicted the
 patient’s health status, trajectory, and/or likely benefits of
-intervention.
-
-Use of Bayesian hierarchical regression on multivariate longitudinal
-patient data (R-packages) developed two-levels (1)time within person and
-(2) persons within a population along with co-variates and
-interventions. They combined exogenous (eg, age, clinical history) and
-endogenous (eg, current treatment) variables on the individual’s
+intervention. Use of Bayesian hierarchical regression on multivariate
+longitudinal patient data (R-packages) developed two-levels (1)time
+within person and (2) persons within a population along with co-variates
+and interventions. They combined exogenous (eg, age, clinical history)
+and endogenous (eg, current treatment) variables on the individual’s
 multivariate health measurements, with the effects of health
 measurements at one time on subsequent interventions.
 
@@ -486,11 +489,10 @@ Limitations
 What is the goal of the paper?
 
 The study provided the Bayesian approach for parameter estimation in
-discrete Weibull regression. Bayesian parametrization performed where
-both on parameters of the discrete Weibull distribution can be
-conditioned on the predictors under a uniform non-informative prior, to
-produce posterior distribution. The model promises its wide
-applicability to analyze count data using R package BDWreg.
+discrete Weibull regression conditioned on the predictors under a
+uniform non-informative prior, to produce posterior distribution. The
+model promises its wide applicability to analyze count data using R
+package BDWreg.
 
 Why is it important?
 
