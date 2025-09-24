@@ -31,182 +31,74 @@ More information about `revealjs`:
 
 ## Introduction {.smaller}
 
-Bayesian Logistic regression
-
--   Healthcare data include DNA sequences, functional images of the
-    brain, patient-reported outcomes, and electronic health records with
-    patients’ sequences of health measurements, diagnoses, and
-    treatments. are complex, and the standard approaches are not
-    adequate for clinical datasets. Use of Electronic Health Records
-    (EHRs) with improved the diagnostic accuracy and predicts treatment
-    effects. Visualizations of posterior distributions to help
-    clinicians and patients to make their decision.Bayesian hierarchical
-    model is a likelihood-based approach and uses priors providing
-    sensitivities.@Zeger2020
-
--   Conventional methods based on clinical criteria and fixed numerical
-    thresholds limit the information captured on the intricate
-    relationship between diagnostic tests and the varying prevalence of
-    diseases. The probability distributions associated with quantitative
-    diagnostic test outcomes have some overlap between the diseased and
-    nondiseased groups. The dichotomous method fails to capture the
-    complexity and heterogeneity of disease presentations across diverse
-    populations. The applicability of the normal distribution
-    (conventional method) is critiqued in dealing with skewness,
-    bimodality, or multimodality.@Chatzimichail2023Nonparametric
-    Bayesian models were reported a better fit for data distributions
-    given the limited existing literature, and were robust in capturing
-    complex data patterns, producing multimodal probability patterns for
-    disease, unlike the bimodal, double-sigmoidal curves seen with
-    parametric models.
-
--   Bayesian statistics is used across different fields (social
-    sciences, ecology, genetics, medicine) where observed and unobserved
-    parameters exist. The stages of Bayesian analysis specify the
-    importance of the priors, data modeling, inferences, model checking
-    and refinement, selecting a proper sampling technique from a
-    posterior distribution, variational inferences, variable selection,
-    and its application across various research
-    fields. @VandeSchoot2021.
-
--   The frequent combination of multiple testing has relatively low
-    statistical power, which is problematic in null-hypothesis
-    significance testing. Linear regression analyses do not account for
-    the published results and summary statistics from similar previous
-    studies. Ignoring information on parameters from previous studies
-    (relevant and readily available), affects the stability and
-    precision of the parameter estimates resulting in lower values than
-    they could have been, resulting in conclusions that are less certain
-    and are affected by sampling variation.
-
-    Multiple linear regression with separate significance tests for all
-    regression coefficients, and with the modest sample sizes, different
-    studies have different sets of statistically significant predictors,
-    and addressing the issue on larger samples is practically
-    unrealisticDevelop a storyline that captures attention and maintains
-    interest. @DeLeeuw2012a
-
--   The application of Logistic Regression included priors on
-    coefficients and sequential updating to predict Individual-level CVD
-    risk.Early diagnosis of at risk population (CVD), impacts health
-    interventions. Limited availability of molecular information in
-    clinical practice (high cost and unavailability) affects efficient
-    disease diagnosis. @Liu2013
-
--   Bayesian approach for parameter estimation in discrete Weibull
-    regression conditioned on the predictors under a uniform
-    non-informative prior, to produce posterior distribution. The model
-    promises its wide applicability to analyze count data using R
-    package BDWreg.@Austin2021
-
--   The retrospective study used NHANES 2-year cross-sectional data
-    (between 2013-2014 year) extracted from 3 datasets (demographics,
-    exam, questionnaire). Response Variable (Binary, Diabetes) was
-    defined as - "Is there one Dr you see for diabetes"
-
--   Predictor Variables (Body Mass Index, factor, 4 levels)
-
-    The original data has BMDBMIC (measured BMI) as categorical and had
-    no missing values. It (BMI_cat) has the following 4 levels:\
-    o Underweight (\<5th percentile)\
-    o Normal (5th–\<85th)\
-    o Overweight (85th–\<95th) o Obese (≥95th percentile)\
-    o Missing We kept it as it is as categorization provides clinically
-    interpretable groups
-
--   Covariates:
-
-<!-- -->
-
--   Gender (factor, 2 levels): Male: Female
-
--   Ethnicity (factor, 5 levels): Mexican American, Non-Hispanic, White
-    Non-Hispanic, Black Other Hispanic, Other Race - Including
-    Multi-Racial
-
--   Age (num, continuous)
-
-Provide an overview of your approach.
-
-To explore missigness in the data, we conducted linear regression lm (),
-and listwise deletion of rows resulted in a reduced sample size (n=14),
-which could introduce bias as the informative missingness if ignored
-(MAR or MNAR). The regression resulted in quasi-separation (warning).
-
-![](images/clipboard-1714098231.png)
-
-![](images/clipboard-145612169.png)
+Type 2 Diabetes (T2D), a major public health concern worldwide prompts
+us to understand the factors contributing to diabetes risk guiding us to
+develop effective prevention strategies. With diabetes, the body doesn’t
+make enough insulin or can’t use the insulin it makes and causes too
+much blood sugar to stay in the bloodstream posing risks of having heart
+disease and other organ damage. Recognizing risk factors of diabetes
+could help prevent DM as an early intervention. Research finds - Age,
+body mass index (BMI), and race as risk factors. Modeling their
+interactions and effects presents methodological challenges. Traditional
+statistical approaches fail to analyze complex relationships or
+uncertainty in predictions. Here, we address the challenges of
+healthcare data analysis using both Frequentist and Bayesian methods on
+the NHANES dataset\> the study is an attempt to identify association of
+these risk factors with diabetes and measure the predictive performance
+of the model, and demonstrate methodological perspectives that could
+enhance actionable insights in healthcare.
 
 ## Methods
 
--   Linear logisitic regression : Warning: glm.fit: fitted probabilities
-    numerically 0 or 1 occurred
+Dataset (NHANES)
 
--   Firth Logisitce regression
+| Dataset | Key variables    | Col3       |
+|---------|------------------|------------|
+| demo1   | age,race, gender | 10175 × 47 |
+| exam1   | BMI              | 9813 × 224 |
+| quest1  | Diabetes         | 9813 × 953 |
 
-    logistf(formula = diab \~ BMI_cat + age + gender + race, data =
-    merged_data) Model fitted by Penalized ML Coefficients: coef
-    se(coef) lower 0.95 upper 0.95 Chisq p method (Intercept) 2.2909182
-    2.0520292 -1.7059362 16.1697706 1.25690744 0.26223728 2
-    BMI_catOverweight 2.5151817 1.9838969 -1.2146946 21.9385716
-    1.68994830 0.19360778 2 BMI_catObese -0.4519637 1.8778881 -5.4843160
-    3.4687761 0.05538832 0.81393924 2 age -0.2545704 0.1911568
-    -1.4579663 0.1148471 1.81192970 0.17827692 2 genderFemale -2.1675543
-    2.0190594 -17.0316807 5.9967059 0.69556457 0.40427809 2 raceOther
-    Hispanic 0.9518795 1.9225099 -12.0194116 10.8617660 0.20246895
-    0.65273532 2 raceNon-Hispanic White -2.5671499 2.2189914 -21.6563170
-    1.6700624 1.36287409 0.24304000 2 raceNon-Hispanic Black 3.3280688
-    2.2005227 -0.4678607 25.3575974 2.86971841 0.09026066 2 raceOther
-    Race - Including Multi-Racial 1.3072954 2.0609641 -2.6483209
-    21.7820826 0.39215076 0.53117103 2 Method: 1-Wald, 2-Profile
-    penalized log-likelihood, 3-None Likelihood ratio test=6.066658 on 8
-    df, p=0.6397653, n=14 Wald test = 5.257182 on 8 df, p = 0.7297677
+-   In this model, we analyze the probability of diabetes based on BMI,
+    age, and race in the dataset with a small sample for certain
+    subgroups in the BMI category, where frequentist estimates are
+    unstable.
 
--   **Challenges of raw data**
+-   Bayesian regression allows the incorporation of prior knowledge and
+    improves estimates.
 
-    -   We found quasi-complete separation in the raw data (9799
-        observations dropped)
-    -   Reduced sample size with less number of complete cases (n=14).
-    -   The model is overfitted to this subset and cannot be
-        generalized.
-    -   Huge coefficients (e.g., 94, –50, 73) and the tiny residual
-        deviance suggest perfect separation and sparse data in some
-        categories with very few observations, resulted in imbalance in
-        the outcome (very few cases of 0 or 1).
-    -   Logistic regression cannot estimate stable coefficients when
-        predictors perfectly classify the outcome.
+-   Posterior distributions provide a full uncertainty measure as
+    credible intervals rather than just point estimates.
 
--   **Multivariate Imputation by Chained Equations (MICE)** @JSSv045i03
+-   Data with missing values are handled in Bayesian methods by aturally
+    incorporate uncertainty.
 
-    -   MI on raw data resulted in filling imputed values with resulting
-        9813 observations with no NAs. A comparative bar plot on
-        missingness in the raw data and the imputed data is presented
-        below.
+-   The predictors show relationships and interactions that are complex
+    or hierarchical in structure. In the dataset the the pre-diabetic
+    category is underrepresented (n=132/9813)
 
-    -   A heatmap of the imputed dataset generated a correlation between
-        **BMI categories** and **Diabetes status.** BMI dummy variables
-        are strongly **negatively correlated.**
-
-    -   **There was** no strong linear association between BMI category
-        and diabetes in the dataset. Chi-square calculation of
-        categorical varaibels revealed p-value = 0.5461, which is \>
-        0.05 with no evidence of association.
-
-    -   For the given raw dataset, Bayesian logistic Regression (GLM) is
-        considered to calculate the probability of having Diabetes by
-        incorporated default prior and using Bernoulli likelihood with a
-        logit link is the standard, interpretable model for risk b.
-        Detail the models or algorithms used.
-
--   Justify your choices based on the problem and data.
+-   a Bayesian regression seem appropriate that would allow
+    incorporation of prior knowledge to stabilize estimates, can account
+    for uncertainty due to missing values, and provides full posterior
+    distributions, offering robust inference than traditional
+    frequentist methods for this dataset.
 
 ## Data Exploration and Visualization
 
--   Describe your data sources and collection process.
+-   NHANES (CDC), .xpt files imported using r
 
--   Present initial findings and insights through visualizations.
+-   Findings:
 
--   Highlight unexpected patterns or anomalies.
+    -   High proportion of missing data (BMI and diabetes status) and
+        has imbalance in observed diabetes outcomes (Yes \> No). Age
+        range of (0,- 80) with median and mean age (29 and 32.5 resp.)
+        shows very young participants (0–10 years) in the
+        diabetes-focused study is unusual, considering the prior
+        knowledge that diabetes is rare in children. Survey-weighted
+        proportions reflects population estimates Male: female :: 48.9%:
+        51%, with the majority participants fall into Non-Hispanic White
+        category. Most adults are of normal weight, and the weighted
+        proportions are suitable to run Bayesian regression that
+        represents the US population.
 
 ## Data Exploration and Visualization {.smaller}
 
