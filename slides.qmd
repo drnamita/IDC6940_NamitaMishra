@@ -1,6 +1,6 @@
 ---
-title: "Present a great story for data science projects"
-subtitle: "This is a Slide Template"
+title: "Bayesian Logistic Regression Application in Diabetes Probability Prediction"
+subtitle: "CapStone project Presentation"
 author: "Namita Mishra (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
 format:
@@ -29,80 +29,76 @@ More information about `revealjs`:
 <https://quarto.org/docs/reference/formats/presentations/revealjs.html>
 :::
 
-## Introduction {.smaller}
+## Introduction
 
-Type 2 Diabetes (T2D), a major public health concern worldwide prompts
-us to understand the factors contributing to diabetes risk guiding us to
-develop effective prevention strategies. With diabetes, the body doesn’t
-make enough insulin or can’t use the insulin it makes and causes too
-much blood sugar to stay in the bloodstream posing risks of having heart
-disease and other organ damage. Recognizing risk factors of diabetes
-could help prevent DM as an early intervention. Research finds - Age,
-body mass index (BMI), and race as risk factors. Modeling their
-interactions and effects presents methodological challenges. Traditional
-statistical approaches fail to analyze complex relationships or
-uncertainty in predictions. Here, we address the challenges of
-healthcare data analysis using both Frequentist and Bayesian methods on
-the NHANES dataset\> the study is an attempt to identify association of
-these risk factors with diabetes and measure the predictive performance
-of the model, and demonstrate methodological perspectives that could
-enhance actionable insights in healthcare.
+-   Type 2 Diabetes (T2D), a public health concern worldwide - body
+    doesn’t make enough insulin or can’t use the insulin it makes
+    causing increase in blood sugar level posing risks of heart disease
+    and other organ damage
+
+-   Understanding factors contributing to Diabetes age, body mass index
+    (BMI): early intervention at population level.
+
+-   Problem: Traditional statistical approaches fail to analyze complex
+    relationships or uncertainty present in healthcare data.
+
+## Goal: Address challenges in healthcare data analysis where traditional statistical approaches fail
+
+-   To analyze complex relationships or uncertainty in predictions, we
+    compare both Frequentist and Bayesian methods on the NHANES dataset.
+
+-   Identify the association of risk factors for diabetes prediction and
+    measure the predictive performance of the model, demonstrating
+    methodological perspectives to enhance actionable insights in
+    healthcare.
 
 ## Methods
 
-Dataset (NHANES)
+-   A study conducted on NHANES dataset aims to determine how healthcare
+    data with missing values can be analyzed using Bayesian regression
+    Model.
+-   Bayesian Regression Model was found appropriate for the given data,
+    based on the data characteristics and the model characteristics
 
-| Dataset | Key variables    | Col3       |
-|---------|------------------|------------|
-| demo1   | age,race, gender | 10175 × 47 |
-| exam1   | BMI              | 9813 × 224 |
-| quest1  | Diabetes         | 9813 × 953 |
+Bayesian Regression Model - - could incorporation of prior knowledge
+could stabilize the estimates - could account for uncertainty and
+provide full posterior distributions, offering robust inference than
+traditional frequentist methods, where estimates are unstable - can
+handle imputation to handle missing data toperform Bayesian regression
+@Austin2021
 
--   In this model, we analyze the probability of diabetes based on BMI,
-    age, and race in the dataset with a small sample for certain
-    subgroups in the BMI category, where frequentist estimates are
-    unstable.
+Data Source
+-([NHANES](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2013))
+from NHANES (CDC) .xpt files imported using r from three datasets
+(demographics, exam, questionnaire). Selected variables were merged into
+a dataframe, cleaned, and explored for analysis to predict the
+probability of diabetes (Response variable) based on BMI, age, and race
+(Predictors).
 
--   Bayesian regression allows the incorporation of prior knowledge and
-    improves estimates.
-
--   Posterior distributions provide a full uncertainty measure as
-    credible intervals rather than just point estimates.
-
--   Data with missing values are handled in Bayesian methods by aturally
-    incorporate uncertainty.
-
--   The predictors show relationships and interactions that are complex
-    or hierarchical in structure. In the dataset the the pre-diabetic
-    category is underrepresented (n=132/9813)
-
--   a Bayesian regression seem appropriate that would allow
-    incorporation of prior knowledge to stabilize estimates, can account
-    for uncertainty due to missing values, and provides full posterior
-    distributions, offering robust inference than traditional
-    frequentist methods for this dataset.
+| Dataset | Key variables     | Dimensions |
+|---------|-------------------|------------|
+| demo1   | age, race, gender | 10175 × 47 |
+| exam1   | BMI               | 9813 × 224 |
+| quest1  | Diabetes          | 9813 × 953 |
 
 ## Data Exploration and Visualization
 
--   NHANES (CDC), .xpt files imported using r
-
--   Findings:
-
-    -   High proportion of missing data (BMI and diabetes status) and
-        has imbalance in observed diabetes outcomes (Yes \> No). Age
-        range of (0,- 80) with median and mean age (29 and 32.5 resp.)
-        shows very young participants (0–10 years) in the
-        diabetes-focused study is unusual, considering the prior
-        knowledge that diabetes is rare in children. Survey-weighted
-        proportions reflects population estimates Male: female :: 48.9%:
-        51%, with the majority participants fall into Non-Hispanic White
-        category. Most adults are of normal weight, and the weighted
-        proportions are suitable to run Bayesian regression that
-        represents the US population.
+-   Data has a small sample for certain subgroups in the BMI category
+    (pre-diabetic category is underrepresented, n=132/9813)
+-   Missing values return only (14) complete cases - imbalance in
+    observed diabetes outcomes (Yes \> No), with age range of (0 - 80
+    years) where very young participants (0–10 years) in the study are
+    unusual for diabetes, considering the prior knowledge that diabetes
+    is rare in children
+-   Survey-weighted proportions reflect population estimates of Male:
+    female :: 48.9%: 51%, majority participants fall into Non-Hispanic
+    White category and under normal weight category
+-   Predictor interactions and correlations are complex or hierarchical
+    in structure
+-   The weighted proportions are suitable for running Bayesian
+    regression that represents the US population
 
 ## Data Exploration and Visualization {.smaller}
-
-A study was conducted to determine how...
 
 ```{r, warning=FALSE, echo=F, message=FALSE}
 # loading packages 
@@ -113,7 +109,9 @@ library(ggrepel)
 library(dslabs)
 ```
 
-```{r, warning=FALSE, echo=F}
+```{r warning=FALSE}
+#| eval: false
+#| include: false
 # Load Data
 #kable(head(murders))
 
@@ -135,17 +133,41 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ## Modeling and Results
 
--   Explain your data preprocessing and cleaning steps.
+Data preprocessing:
 
--   Present your key findings in a clear and concise manner.
+-   Raw data analysis: finds quasi-separation due to listwise deletion
+    of missing values with a resulting small sample size, revealing
+    missingness due to MAR or MNAR
 
--   Use visuals to support your claims.
+-   Multiple Imputation, data analytics, and visuals
 
--   **Tell a story about what the data reveals.**
+    -   Missingness - No NA's and the sample size was retained
+
+    -   Trace plots and density plots - compare distributions of imputed
+        vs observed values
+
+    -   Quality check on imputation - Number of imputations, means,
+        variances, and proportions for consistency of all datasets
+        generated, VIFs or correlations, and structural violations for
+        categorical variables
+
+    -   Standardization of continuous predictors and ensuring outcome
+        variability is maintained
+
+    Bayesian Logistic Regression analytics and findings from posteriors
+
+    -   
+
+-   **Tell a story about what the data reveals**
 
 ```{r}
 
+
 ```
+
+## Bayesian probability equation
+
+P(β,Ymis​∣Yobs​,X)∝P(Yobs​,Ymis​∣X,β)⋅P(β)
 
 ## Conclusion
 
