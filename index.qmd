@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Logistic Regression models and missingness - Application in Diabetes Probability Prediction"
+title: "Bayesian Logistic Regression - Application in Probability Prediction of disease (Diabetes) "
 subtitle: "CapStone Project_2025"
 author: "Namita Mishra (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
@@ -17,200 +17,66 @@ editor:
   markdown: 
     wrap: 72
 ---
+
 Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
----
-
-## Literature Review
+------------------------------------------------------------------------
 
 ## Introduction
 
-1.  **Bayesian Hierarchical Model and MCMC**
+Diabetes Mellitus (DM) is a major public health challenge, where risk
+factors (obesity, age, and race and gender) contribute to developing
+diabetes. Identifying risk factors (predictors) is essential for
+prevention and targeted intervention. Logistic regression is the standard tool used to estimate the association between risk factors and binary outcomes, such as the presence or absence of diabetes. However, classical maximum likelihood estimation (MLE) can be unstable when there are small sample sizes, missing data, or situations of quasi- or
+complete separation in the data. 
 
-What is the goal of the paper?
+Healthcare data includes wide variety of samples (DNA sequences, functional images of the brain, patient-reported outcomes, and electronic health records (EHR), survey
+records, sequences of health measurements, diagnoses, and treatments) are complex, and the standard approaches to analyze them are not adequate @Zeger et al. (2020) performed **Bayesian Hierarchical Model and MCMC**, by combining prior knowledge and patient data (EHR) to predict the patient’s health status, trajectory, and/or likely benefits of intervention and using multivariate longitudinal patient data using R-packages developed two-levels (1)time within person and (2) persons within a population along with co-variates and combined exogenous (age, clinical history) and endogenous (current treatment) variables on the individual’s multivariate health measurements. The model provided posterior distribution and an estimate of the marginal distribution of the regression coefficients by integration of Markov chain Monte Carlo (MCMC). The model was used to identify low-risk patient population with pneumonia etiology (children), prostate cancer, and mental disorders.  Because it was entirely parametric (model limitations), an extensions to nonparametric or more flexible parametric models was recommended.
 
-To develop a Bayesian hierarchical model for multivariate longitudinal
-data to predict health status, trajectories, and intervention effects at
-the individual level in PCORI mission.
-
-Why is it important?
-
-Healthcare data include DNA sequences, functional images of the brain,
-patient-reported outcomes, and electronic health records with patients’
-sequences of health measurements, diagnoses, and treatments. are
-complex, and the standard approaches are not adequate for clinical
-datasets.
-
-How is it solved?
-
-Use of Electronic Health Records (EHRs) with improved the diagnostic
-accuracy and predicts treatment effects. Visualizations of posterior
-distributions to help clinicians and patients to make their decision.
-
-Combining prior knowledge and patient data with evidence predicted the
-patient’s health status, trajectory, and/or likely benefits of
-intervention. Use of Bayesian hierarchical regression on multivariate
-longitudinal patient data (R-packages) developed two-levels (1)time
-within person and (2) persons within a population along with co-variates
-and interventions. They combined exogenous (eg, age, clinical history)
-and endogenous (eg, current treatment) variables on the individual’s
-multivariate health measurements, with the effects of health
-measurements at one time on subsequent interventions.
-
-Bayesian hierarchical model provided posterior distribution for
-predictor variables and an estimate of the marginal distribution of the
-regression coefficients for each coefficient. A large sample which is
-based on likelihood dominates the prior distribution for regression
-coefficients. Bayesian hierarchical model is a likelihood-based approach
-and uses priors providing sensitivities.
-
-The integration of Markov chain Monte Carlo (MCMC) estimated the
-posterior distributions, and avoided missing data and complex outcome
-measurements.
-
-Results and application
-
--   Applied in pneumonia etiology (children), prostate cancer, and
-    mental disorders to identify low-risk patient population
--   To reduce the risk of over-treatment, complications,adverse effects,
-    and financial burden for patients (Disease Reclassification).
--   Prostate cancer software implementation within the hospital setup
-    (JHM HER).
-
-Limitation:
-
-Models were entirely parametric, and recommended for extensions to
-nonparametric or more flexible parametric models for neuroimage or
-genomic data.
-
-Recommendations are to address unmet need across a larger, diverse
-population, in other diseases (autoimmune diseases, sudden cardiac
-arrest, and diabetes) and to embed tools to acquire and use the most
-relevant information for a better outcome at an affordable cost.
-@Zeger2020
-
-2.  **Bayesian Inference (parametric vs non-parametric)**
-
-What is the goal of the paper?
-
-The study calculated the posterior probability of disease diagnosis by
-applying Bayesian inference to develop two modules comparing parametric
+**Bayesian Inference (parametric vs non-parametric)** study conducted by @Chatzimichail2023
+calculated the posterior probability of disease diagnosis by
+applying Bayesian inference via two modules comparing parametric
 (with a fixed set of parameters) and nonparametric distributions (which
-do not make a priori assumptions). The National Health and Nutrition
+do not make a priori assumptions) on National Health and Nutrition
 Examination Survey data from two separate diagnostic tests on both
 diseased and non-diseased populations were used for model development.
-
-Why is it important?
-
-Conventional methods based on clinical criteria and fixed numerical
+The mentioned conventional methods based on clinical criteria and fixed numerical
 thresholds limit the information captured on the intricate relationship
 between diagnostic tests and the varying prevalence of diseases. The
 probability distributions associated with quantitative diagnostic test
-outcomes have some overlap between the diseased and nondiseased groups.
+outcomes overlap between the diseased and nondiseased groups.
 The dichotomous method fails to capture the complexity and heterogeneity
 of disease presentations across diverse populations. The applicability
 of the normal distribution (conventional method) is critiqued in dealing
-with skewness, bimodality, or multimodality.
-
-How is it solved?
-
-Bayesian nonparametric (vs parametric) diagnostic modeling is a Flexible
-distributional modeling for test outcomes; posterior disease
-probabilities
-
-The study developed models using Bayesian inference for posterior
-probability calculation in the Wolfram Language by integrating prior
+with skewness, bimodality, or multimodality.  they reported Bayesian nonparametric (vs parametric) diagnostic modeling as a Flexible distributional modeling for test outcomes (posterior disease probabilities). Their models using Bayesian inference for posterior
+probability calculation used Wolfram Language and integrated prior
 probabilities of disease with distributions in both diseased and
-nondiseased populations. The approach enabled the evaluation of combined
-data from multiple diagnostic tests and resulted in improved the
-diagnostic accuracy, precision, and adaptability. The model showed
-flexibility, adaptability, and versatility in the diagnostic.
-
-Results
-
-Nonparametric Bayesian models were reported a better fit for data
-distributions given the limited existing literature, and were robust in
+nondiseased populations which enabled them to evaluate the combined
+data from multiple diagnostic tests with improved diagnostic accuracy, precision, and adaptability. The model showed flexibility, adaptability, and versatility in the diagnostic. They found Nonparametric Bayesian models a better fit for data
+distributions given the limited existing literature. Model was reported robust in
 capturing complex data patterns, producing multimodal probability
 patterns for disease, unlike the bimodal, double-sigmoidal curves seen
-with parametric models.
+with parametric models. The study limitations is the reliance on parametric models, limited scholarly publications and over-dependence on prior probabilities increase the uncertainties, resulting in broader confidence intervals for posterior probabilities.
+They mentioned systemic bias (unrepresentative datasets), incomplete datasets and absence of normative data compromises the accuracy of results, reliability and validity of Bayesian diagnostic methods and that combined with other statistical and computational techniques could enhance diagnostic capabilities, @Chatzimichail2023
 
-Limitations
-
--   Reliance on parametric models
-
--   Limited scholarly publications and over-dependence on prior
-    probabilities increase the uncertainties, resulting in broader
-    confidence intervals for posterior probabilities.
-
--   Systemic bias (unrepresentative datasets) compromises the accuracy
-    of Bayesian calculations.
-
--   For Incomplete datasets, Bayesian methods combined with other
-    statistical and computational techniques could enhance diagnostic
-    capabilities.
-
--   Absence of normative data compromises the reliability and validity
-    of Bayesian diagnostic methods. @Chatzimichail2023
-
-3.  **Bayesian methodology overview (stages, development and
-    advantages)**
-
-What is the goal of the paper?
-
-The stages of Bayesian analysis are presented here specifying the
-importance of the priors, data modeling, inferences, model checking and
-refinement, selecting a proper sampling technique from a posterior
-distribution, variational inferences, variable selection, and its
-application across various research fields.
-
-Why is it important?
-
-Bayesian statistics is used across different fields (social sciences,
-ecology, genetics, medicine) where observed and unobserved parameters
-exist.
-
-Variable selection- is the process of identifying the sub-set of
-predictors to include in a model along with determining the functional
-form of the model especially where a large number of potential
-predictors are available. Unnecessary variables in a model are
-associated with issues such as multicollinearity, insufficient samples,
-overfitting the current data leading to poor predictive performance on
-new data and making model interpretation more difficult.
-
-How is it solved?
-
-Variables selection is best after checking correlations among the
+To understand the **Bayesian methodology** an overview (stages, development and advantages) by @VandeSchoot2021 specify the importance of the priors, data modeling, inferences, model checking and refinement, selecting a proper sampling technique from a posterior distribution, variational inferences, variable selection, and its application across various research fields. The y applied Bayesian statistics across different fields (social sciences, ecology, genetics, medicine) in observed and unobserved parameters. They emphasize variable selection as a process of identifying the sub-set of
+predictors to include in a model especially where a large number of potential
+predictors are available. Unnecessary variables present issues such as multicollinearity, insufficient samples, overfitting the current data leading to poor predictive performance on new data making model interpretation difficult. Variables selection is best after checking correlations among the
 variables in the model (Eg: gene-to-gene interaction to predict genes in
-biomedical research).
+biomedical research). 
 
-When the sample size is small, Bayesian estimation with mildly
-informative priors is often used. The study describes categories of
-priors (informative, weakly informative and diffuse) based on the degree
-of (un)certainty (hyperparameters) surrounding the population parameter.
-The prior distribution with a larger variance represents a greater
-amount of uncertainty surrounding. Prior elicitation through experts,
-generic expert, data-based, sample data using maximum likelihood or
-sample statistics, etc help construct a prior distribution. A prior
-sensitivity analysis of the likelihood - examines different forms of the
-model and assesses how the priors and the likelihood align and impact on
+Considering small sample size, Bayesian estimation with mildly
+informative priors is often. Based on the degree
+of (un)certainty (hyperparameters) surrounding the population parameter priors (informative, weakly informative and diffuse), prior distribution with a larger variance represents a greater amount of uncertainty. Prior elicitation could be through different ways (experts, generic expert, data-based, sample data using maximum likelihood or sample statistics). 
+A prior sensitivity analysis of the likelihood that examines different forms of the model could assess how the priors and the likelihood align and impact on
 posterior estimates, reflecting variations not captured by the prior or
-the likelihood alone. Prior estimation -allows data-informed shrinkage,
+the likelihood alone. Prior estimation allows data-informed shrinkage,
 regularization or influence algorithms towards a likely high-density
-region, and improves estimation efficiency.
-
-In a small sample i.e. less information, incorporation of priors
-strengthens the observed data and lends possible value(s) for the
-unknown parameter(s). Knowing the exact probabilistic specification of
-the priors for a complex model with smaller sample sizes is important.
-Frequentists do not consider the probability of the unknown parameters
-as useful, and consider to be fixed; likelihood is considered as the the
-conditional probability distribution p(y\|θ) of the data (y), given
-fixed parameters (θ).
-
+region, and improves estimation efficiency. In a small sample i.e. less information, incorporation of priors strengthens the observed data and lends possible value(s) for the unknown parameter(s). To know probabilistic specification of the priors for a complex model with smaller sample sizes is important.
 In Bayesian inference, unknown parameters (random variables) have varied
 values, while the (observed) data have fixed values. The likelihood is a
-function of θ for the fixed data y. Therefore, the likelihood function
+function of θ for the fixed data y. The likelihood function
 summarizes a statistical model that stochastically generates a range of
 possible values for θ and the observed data y. With priors and the
 likelihood of the observed data, the resulting posterior distribution
@@ -223,352 +89,118 @@ the probability distribution of interest to be specified up to a
 constant of proportionality and is scalable to high dimensions to obtain
 empirical estimates of the posterior distribution of interest. Bayesian
 inference adopts a simulation-based strategy for approximating posterior
-distributions.
+distributions.Frequentists do not consider the probability of the unknown parameters and consider to be fixed and likelihood is considered as the the conditional probability distribution p(y\|θ) of the data (y), given
+fixed parameters (θ). Spatial and temporal variability are factored in Bayesian general linear models. A posterior distribution can simulate new data conditional on this distribution and assess, to providing valid predictions. The Bayesian approach in analyzing large-scale cancer genomic data, identifies novel molecular changes in cancer initiation and progression, the interactions between mutated genes, captured mutational signatures, key genetic interactions components, allow genomic-based patient stratification (clinical trials, personalized use of therapeutics) and in understanding cancer evolutionary processes. The mentioned the model reproducibility, reporting standards, and outlined a checklist.
+Limitations were related to the dependencies (autocorrelation of parameters over time in temporal model) and the subjectivity issue of priors.
 
-Spatial and temporal variability are factored in Bayesian general linear
-models. A posterior distribution can simulate new data conditional on
-this distribution and assess, to providing valid predictions.
 
-Results and application
+The study by @Klauenberg2015 emphasizes prior elicitation, analytical posteriors, robustness checks through guidance provided on Bayesian inference by performing **Bayesian Normal linear regression, Core parametric (conjugate)model with Normal–Inverse-Gamma prior ** in metrology to calibrate instruments to evaluate inter-laboratory comparisons in determining fundamental constants.
 
-The Bayesian approach analyzes large-scale cancer genomic data,
-identifies novel molecular changes in cancer initiation and progression,
-the interactions between mutated genes and captured mutational
-signatures, highlighting key genetic interactions components, allowing
-genomic-based patient stratification both in clinical trials, in the
-personalized use of therapeutics, and in understanding cancer and its
-evolutionary processes.
 
-The study proposes strategies for reproducibility and reporting
-standards, outlining a checklist and emphasize on the impact of Bayesian
-analysis on artificial intelligence in the future.
-
-Limitations
-
-In temporal models, the spatial and/or temporal dependencies
-(autocorrelation of parameters over time)is a challenge in posterior
-inference.The subjectivity of priors is highlighted by critics as a
-potential drawback of Bayesian methods. @VandeSchoot2021
-
-4.  **Bayesian Normal linear regression, Core parametric (conjugate)
-    model with Normal–Inverse-Gamma prior**
-
-What is the goal of the paper?
-
-The study emphasizes prior elicitation, analytical posteriors,
-robustness checks through guidance provided on Bayesian inference by
-performing Bayesian Normal linear regression in metrology to calibrate
-instruments to evaluate inter-laboratory comparisons in determining
-fundamental constants.
-
-Why is it important?
-
-Errors are **independent and identically distributed in Gaussian** and
-variance is unknown and is estimated from data, the relationship between
-X and Y is statistical, with noise and model uncertainty and the
-regression can not be treated as a measurement function . There is a
-need for statistical approaches (likelihood, Bayesian, bootstrap, etc.)
-to quantify uncertainty Guide to the Expression of Uncertainty in
+In gaussian- Errors are independent and identically distributed, variance is unknown and is estimated from data, the relationship between X and Y is statistical, with noise and model uncertainty and the regression can not be treated as a measurement function . They mentioned statistical approaches (likelihood, Bayesian, bootstrap, etc.) could quantify uncertainty since Guide to the Expression of Uncertainty in
 Measurement (GUM) and its supplements are not applicable directly.
+They emphasized Bayesian inference that accounts for a priori information, and robustifies the analyses through steps including prior elicitation, posterior calculation, and robustness to prior uncertainty and model adequacy for the model development and about assumptions critical to Bayesian inference.
 
-How is it solved?
-
-Bayesian inference accounts for a priori information, and robustifies
-the analyses. It emphasizes steps (prior elicitation, posterior
-calculation, and robustness to prior uncertainty and model adequacy) for
-the model development and about assumptions critical to Bayesian
-inference.
-
-All unknowns (observables (data) and unobservables such as parameters
-and auxiliary variables) are considered random, are assigned probability
+In Bayesian, unknowns such as (observables: data and unobservables: parameters and auxiliary variables) are random, are assigned probability
 distributions of the available information, and update prior knowledge
 about the unobservables with information about them contained in the
 data. The graphical representation of prior distribution and likelihood
 function, sensitivity analyses, or model checking enhances the
 elicitation and interpretation process.
 
-For Normal linear regression problems (1) prior distribution - Normal
-inverse Gamma (NIG) distribution to a posterior is from the same family
-of (NIG) distribution. The NIG prior with known variance σ2 of
-observations is a conjugate prior distribution. Vague or non-informative
-prior distributions can be derived from NIG prior. (2) alternative
-families of prior distributions (hierarchical priors) assign an
-additional layer of distributions to uncertain prior parameters or
-non-parametricriors.
+For Normal linear regression 
+(1) Normal inverse Gamma (NIG) distribution to a posterior is from the same family of (NIG) distribution. The NIG prior with known variance σ2 of observations is a conjugate prior distribution. Vague or non-informative prior distributions can be derived from NIG prior
+(2) alternative families (hierarchical priors) assign an additional layer of distributions to uncertain prior parameters or non-parametricriors.
 
 Bayesian inference is influenced by
-
 \- the uncertainty in the transformation of prior knowledge to prior
 distributions
-
 \- the assumptions of the statistical model
-
 \- the mistakes in data acquisition
 
-Results and Application
+**Bayesian Hierarchical / meta-analytic linear regression** model in a study by @DeLeeuw2012awas was developed to test of a formal method for augmenting data in linear regression analyses, by incorporating both exchangeable and unexchangeable information on regression coefficients (and standard errors) of previous studies.
 
-The knowledge from related previous experiments (Normal inverse Gamma
-distributions) allows for analytic posterior calculations of many
-quantities of interest. @Klauenberg2015
+They highlighted issues of multiple testing resulting in relatively low statistical power, which is problematic in null-hypothesis significance testing. In multiple linear regression models with separate significance tests for all
+regression coefficients, with the modest sample sizes, in different studies with different sets of statistically significant predictors, and addressing for larger samples is practically unrealistic. Linear regression analyses do not account summary statistics from similar previous studies and ignoring past information on parameters affects the stability and precision of the parameter estimates and report lower values, are less certain and are affected by sampling variation.
 
-5.  **Bayesian Hierarchical / meta-analytic linear regression and priors
-    (exchangeable and unexchangeable)**
+The study conducted Bayesian linear regression by accommodating prior knowledge to overcome the
+absence of formal studies, to handle issues of increasing the sample size. They augmented the data of a new study and incorporated priors on regression coefficients and standard errors from previous similar studies.
 
-What is the goal of the paper?
-
-The study developed a test of a formal method for augmenting data in
-linear regression analyses, by incorporating both exchangeable and
-unexchangeable information on regression coefficients (and standard
-errors) of previous studies.
-
-Why is it important?
-
-The frequent combination of multiple testing has relatively low
-statistical power, which is problematic in null-hypothesis significance
-testing. Linear regression analyses do not account for the published
-results and summary statistics from similar previous studies. Ignoring
-information on parameters from previous studies (relevant and readily
-available), affects the stability and precision of the parameter
-estimates resulting in lower values than they could have been, resulting
-in conclusions that are less certain and are affected by sampling
-variation.
-
-Multiple linear regression with separate significance tests for all
-regression coefficients, and with the modest sample sizes, different
-studies have different sets of statistically significant predictors, and
-addressing the issue on larger samples is practically unrealistic.
-
-How is it solved?
-
-Bayesian linear regression accommodates prior knowledge. To overcome the
-absence of formal studies, it handles the issue of increasing the sample
-size, and augments the data of a new study with regression coefficients
-and standard errors from previous similar studies.
-
-To solve the issue of the univariate case analysis, Bayesian linear
-regression combines the evidence of specific predictors from different
-linear regression analyses (meta-analysis) to resolve the issue of
+To solve the issue of the univariate case analysis and the issue of
 simultaneously combining multiple regression parameters per study, which
-ignore the relationship between the regression coefficients.
+ignore the relationship between the regression coefficients, Bayesian linear
+regression combined with the evidence of specific predictors from different
+linear regression analyses (meta-analysis) was conducted. Adding summary statistics from previous studies provided a more acceptable solution to when previous study data are not (realistically) obtainable.
 
-Adding summary statistics from previous studies in Bayesian linear
-regression provide a more acceptable solution esp. when previous study
-data are not (realistically) obtainable.
+Based on the information on predictors from previous and current data,
+the models are categorized into 
+**(1) Exchangable - when the current data and previous studies have the same set of predictors. 
+**(2) Unexchangable – when the predictors differ in the two studies.
 
-Based on the information of predictors from previous and current data,
-the models are categorized into (1) Exchangable - when the current data
-and previous studies have the same set of predictors. (2) Unexchangable
-– when the predictors were different in the two.
-
-The steps to Bayesian linear regression steps are mentioned here that
-yield the posterior density reflecting the updated knowledge about the
-model parameters after having observed the data,
+They emphasize steps - 
 
 (1) To calculate the probability density function for the data, given
-    the unknown model parameters;
-
-(2) The likelihood function - that quantifies what is assumed to be
-    known about the model parameters before observing the data. The
-    Standard multiple linear regression model, integrate the prior, and
+    the unknown model parameters; the Standard multiple linear regression model, integrate the prior, and
     provide the joint posterior density using the Gibbs sampler.
+(2) The likelihood function - that quantifies what is assumed to be
+    known about the model parameters before observing the data.
+(3) A hierarchical model use to analyze parameters where
+    studies are not-exchangeable.
 
-(3) A hierarchical model version is used to analyze parameters where
-    studies are under not-exchangeable category.
+They found incorporating priors in a linear regression on new data yield a
+significantly better parameter estimate with an adequate approximation, encouraging performance gains and the large effects. 
 
-Results
+Performance of the two versions (exchangeable and unexchangeable) of the replication model was
+consistently superior to using the current data alone. 
 
-Incorporating priors in a linear regression on new data yield a
-significantly better parameter estimate with an adequate approximation.
-Encouraging performance gains and the large effects are obtained when
-the data from previous studies are incorporated. Performance of the two
-versions (exchangeable and unexchangeable) of the replication model was
-consistently superior to using the current data alone. The model using
-exchangeable and unexchangeable prior offers better parameter estimates
+The model using exchangeable and unexchangeable prior offers better parameter estimates
 in a linear regression setting without the need to expend a large amount
 of time and energy to obtain data from the previous studies.
-
-Hierarchical unexchangeable model version offers the advantage of being
+Hierarchical unexchangeable model offers the advantage of being
 able to address questions about differences between studies and thus
-allows for explicit testing of the exchangeability assumption.
+allows for explicit testing of the exchangeability assumption. 
 
-Limitations
+Limitations were based on having the same set of predictors and correlation between predictor variables. @DeLeeuw2012a
 
--   All studies need to have the same set of predictors.
--   The issue of correlation between predictor variables. @DeLeeuw2012a
+**Bayesian logistic regression (Bayesian GLM) (Sequential clinical reasoning approach) model** in longitudinal prospective cohort was developed to predict the risk of incident cardiovascular disease. They developed 3 models : (1) demographic features (basic model) (2) six metabolic syndrome components (metabolic score model) (3) conventional risk factors (enhanced model). The method was based on the application of Logistic Regression including priors on coefficients
+and sequential updating to predict individual-level CVD risk.
 
-6.  **Bayesian logistic regression (Bayesian GLM) (Sequential clinical
-    reasoning approach)**
+In @Liu2013 study, the author developed model to overcome the issue of limited availability of molecular information in clinical practice (high cost and unavailability) that affects efficient disease diagnosis. They mentioned an alternative approach to analyze data to efficiently identify a high-risk population based on the routinely checked biological markers before doing these expensive molecular tests.
 
-What is the goal of the paper?
+Model such as Framingham Risk Score method were not sufficient because of Heterogeneity (geographic, ethnic group, variations, and social contextual network) observed was often as unobservable and unmeasurable and required to construction separate models.
 
-To study was conducted on a longitudinal prospective cohort to develop a
-model to predict the risk of incident cardiovascular disease. They
-incorporated (1) demographic features (basic) (2) six metabolic syndrome
-components (metabolic score) (3) conventional risk factors (enhanced
-model)
+They developed and applied the Sequential clinical reasoning approach model on subjects enrolled in a screening program (Keelung Community) (20–79 years) in the Keelung city of Taiwan, and were
+analyzed for 5 years to identify incident cancers and chronic diseases (cardiovascular disease).
+The study classified incident CVD cases by incorporating (1) standardized risk score (MetS: fasting glucose, blood pressure, HDL-C, triglyceride and waist circumference) (2) risk factors: gender, heredity, smoking, alcohol drinking, family history and betel quid. 
 
-The application of Logistic Regression included priors on coefficients
-and sequential updating to predict Individual-level CVD risk.
+The methodology used is the Bayesian clinical reasoning approach based on a sequential manner to developed three models that emulated a clinician's evaluation process. The Bayesian clinical reasoning approach considered the normal distribution of regression coefficients of all predictors, allowing for
+uncertainty of clinical weights and the credible intervals of predicted risk estimates were averaged. 
 
-Why is it important?
-
-Early diagnosis of at risk population (CVD), impacts health
-interventions. Limited availability of molecular information in clinical
-practice (high cost and unavailability) affects efficient disease
-diagnosis.
-
-It is required to have an alternative approach to analyze data to
-efficiently identify a high-risk population based on the routinely
-checked biological markers before doing these expensive molecular tests.
-
-The tailored Framingham Risk Score method, is not sufficient because of
-the differences present in ethnic groups, location, and socio-economic
-status, and require the construction of their own models. Heterogeneity
-(geographic, ethnic group, variations, and different characteristics of
-social contextual network) often is unobservable and unmeasurable.
-
-How is it solved?
-
-The subjects enrolled in a screening program (Keelung Community) for
-mass screening (20–79 years) in the Keelung city of Taiwan, were
-analyzed for 5 years to identify incident cancers and chronic diseases
-(cardiovascular disease).
-
-The study was able to classify the risk of having incident CVD cases by
-(1) available and calculated standardized risk score of the MetS
-components (fasting glucose, blood pressure, HDL-C, triglyceride and
-waist circumference) (2) together with conventional risk factors
-(gender, heredity, smoking, alcohol drinking, family history of parent's
-CVD and betel quid and other factors).
-
-Emulating a clinician's evaluation process, the Bayesian clinical
-reasoning approach in a sequential manner was developed and applied in
-three models.
-
-The Bayesian clinical reasoning approach considered the normal
-distribution of regression coefficients of all predictors, allowing for
-uncertainty of clinical weights. The credible intervals of predicted
-risk estimates were obtained by averaging out. In the model, the
-individual risk is elicited by prior speculation (first impression) that
+In the model, the individual risk is elicited by prior speculation (first impression) that
 is updated by objective observed data (patient's history and laboratory
 findings), the regression coefficients for computing risk score were
-treated as random variable with a certain statistical distribution (e.g.
-normal distribution) rather than a fixed value (traditional risk
+treated as random variable with normal distribution rather than a fixed value (traditional risk
 prediction model by frequentist). The updated prior distribution with
 the likelihood of the current data provided a posterior distribution to
-predict the risk for a specific disease. The sequential approach
-included -
+predict the risk for a specific disease. 
 
-1.  Basic model developed via logistic regression used prior information
-    constructed on gender, age, age2, and time period.
-2.  The Classical model (metabolic score model: MS model) included six
-    MetS components.
-3.  The third (enhanced model) incorporated information on smoking,
-    drinking, betel-quid, and family history of CVD.
+On comparing the three models, the enhanced model had better performance where conventional risk factors were incorporated (enhanced model). The proposed models predicted CVD incidence at the individual level, and incorporated routine information with a sequential
+Bayesian clinical reasoning approach. Patients’ background contributed significantly to baseline risk. Even with ecological heterogeneity, the regression model adopted individual characteristics and made individual risk prediction for the CVD incidence.
+The limitation of the model mentions the interactions between predictors and cross-validated through external validation by applying the proposed models to new subjects not included in the training of the model parameters.
 
-Results
+**Bayesian Multiple Imputation and Logistic regression** was conducted by @Austin2021 on missing data, from clinical research. They mentioned missing values are not measured or recorded for all subjects are due to varied reasons: (i) patient refusal to respond to specific questions (ii) loss of patient to follow-up; (iii)investigator or mechanical error (iv) physicians not ordering certain investigationsfor some patients.
+The study emphasizes on understanding the type of missing data (MAR, MNAR, MCAR). Multiple
+imputation (MI) address missing data, provides multiple plausible values for missing values of a given variable resulting in creation of multiple completed data sets, conducts identical statistical analyses on each completed data sets, and the pooled results from across complete data sets, are then analyzed.
+The study conducted MI, and mentioned steps through its implementation and development, emphasizing on the number of imputed data sets and to create, and addresses derived variables.
+They provided application of MI in analyzing patients hospitalized with heart failure to estimate the probability of 1-year mortality in the presence of missing data using (R, SAS, and Stata)@Austin2021.
 
-Compared to the basic model and classical model, the enhanced model had
-better performance. The proposed models predicted CVD incidence at the
-individual level by incorporating routine information with a sequential
-Bayesian clinical reasoning approach. Patients’ background significantly
-contributes to baseline risk. Even with ecological heterogeneity, the
-regression model adopts individual characteristics and makes individual
-risk prediction for the CVD incidence.
+Our study applies Bayesian logistic regression on a dataset with quasi-separation issue, missing values and the the resultant small sample size. It is a retrospective study, aimed to analyze the relationship between diabetes status and key predictors (body mass index (BMI), age, gender, and race), using NHANES survey data collected  between 2013-2014. 
+On exploring the dataset, which initially had 9813 observations and selected 5 variables, later revealed that the effective sample size was reduced due to complete case analysis and listwise deletion of missing data. Considering the small sample size and quasi-separation issue is as a challenge for traditional logistic regression models as complete-case model showed evidence of quasi-separation, with implausibly large coefficients and unstable estimates. This motivated us to apply multiple imputation (MICE) and conduct Bayesian logistic regression to provide a flexible framework for modeling uncertainty and incorporating prior knowledge and avoiding the issue of separation and small dataset.
 
-Limitations
-
--   Whether the interactions between age, gender, metabolic score, and
-    other risk factors should be included.
--   The use of an enhanced model should be validated through external
-    validation by applying the proposed models to new subjects not
-    included in the training of the model parameters. @Liu2013
-
-7.  **Bayesian parameter estimation in discrete Weibull regression**
-
-What is the goal of the paper?
-
-The study provided the Bayesian approach for parameter estimation in
-discrete Weibull regression conditioned on the predictors under a
-uniform non-informative prior, to produce posterior distribution. The
-model promises its wide applicability to analyze count data using R
-package BDWreg.
-
-Why is it important?
-
-Discrete data (eg: quality of care, planning capacity within a hospital,
-the number of visits to a specialist and genomic data) are often
-highly-skewed distributions.
-
-How is it solved?
-
-Similarly to Weibull regression for lifetime data analysis and survival
-analysis for continuous response variables, a regression model for a
-discrete variable based on the discrete Weibull distribution report a
-good fit in comparison with other distributions for count data.
-
-Features of discrete Weibull distribution such as -Poissonmixtures,
--Poisson-Tweedie, -zero-inflated semi-parametric regression and
--COMPoisson -the ability to capture both over and under-dispersion and a
-closed-form analytical expression of the quantiles of the conditional
-distribution make it an alternative to the more traditional Poisson and
-Negative Binomial distributions.
-
-Non-informative priors and the Laplace priors with a hyper penalty
-parameter calculated posterior distribution which is proper with finite
-moments under a uniform non-informative prior.
-
-Results
-
-The advantage of Bayesian approaches over classical maximum likelihood
-inference are: (1) the possibility of taking prior information into
-account, such as sparsity or information from historical data, (2) the
-procedure returns automatically the distribution of all parameters, from
-which credible intervals can easily be obtained.
-
-Application
-
-The study compared the proposed model with the Bayesian Poisson
-(BPoisson), Bayesian Negative Binomial (BNB) models and Bayesian DW
-model on three datasets (inhaler use, health survey, health registry),
-where BDW(regQ,β) models showed superior performance to the other
-models. The Bayesian discrete Weibull model shows applicability in
-analysing count data from the medical domain.\@Haselimashhadi2018
-
-8.Bayesian Multiple Imputation and Logistic regression
-
-Missing data, common occurrence in clinical research occurs when the
-values of the variables of interest are not measured or recorded for all
-subjects in the sample due to - (i) patient refusal to respond to
-specific questions (ii) loss of patient to follow-up; (iii)investigator
-or mechanical error (iv) physicians not ordering certain investigations
-for some patients
-
-The study mention the importance of understanding the type of missing
-data (MAR, MNAR, MCAR), based on the type missing data, Multiple
-imputation (MI) is a popular approach for addressing the presence of
-missing data. Mi provides multiple plausible values of a given variable
-imputed or filled in for each subject who has missing data for that
-variable. This results in the creation of multiple completed data sets.
-
-With this approach identical statistical analyses are conducted in each
-of these complete data sets. The pooled results from across complete
-data sets, are then analyzed.
-
-The study introduces MI, its implementation, developing the imputation
-model, emphasizing number of imputed data sets to create, and addresses
-derived variables.
-
-They provided application of MI through an analysis on patients
-hospitalized with heart failure to estimate the probability of 1-year
-mortality in the presence of missing data using (R, SAS, and
-Stata)@Austin2021
 
 ## Method and Data Preparation
-
-Statistical Tool used is R, R packages, and libraries to import data,
-management and conduct analysis. Using haven package .XPT files were
-converted to R-object as dataframe (df).
+Statistical Tool used is R, R packages, and libraries to import, manage and analyze the data. 
+Data collected is from NHANES 2-year cross-sectional data (2013-2014 year) using 3 datasets (demographics, exam, questionnaire) @CenterforHealthStatistics1999. Using haven package .XPT files were imported in r-studio modified to dataframe (df).
 
 ```{r}
 #| label: Libraries
@@ -588,26 +220,26 @@ library(tidyr)
 library(forcats)
 library(ggplot2)
 library ("nhanesA")                 
-
 options(repos = c(CRAN = "https://cloud.r-project.org"))
-
 install.packages("nhanesA")
+library(classpackage)
+library(janitor)
+install.packages("gt")   
+library(gt)
+library(survey)
+library(DataExplorer)
+library(logistf)
+
 
 ```
 
-Data Source - The retrospective study used NHANES 2-year cross-sectional
-data (between 2013-2014 year) extracted from 3 datasets (demographics,
-exam, questionnaire) @CenterforHealthStatistics1999.
 
 Data Management
 
-We created subsets from original 3 datasets (demographics, exam,
-questionnaire) with selected variables of interest and then merged
-ininto a single dataframes for analysis and data exploration. The merged
-dataframe was cleaned, categorized, and recoded and analyzed for basic
-statistics, anamolies and patterns before running Bayesian regression.
-Final dataset included weighted means of all selected variables of
-interest -
+Subsets created from the original weighted 3 datasets (demographics, exam,
+questionnaire) were merged into a single dataframe for analysis and
+exploration. The merged dataframe included selected variables of interest, was cleaned, variables categorized, and recoded and analyzed. Basic statistics, anamolies and patterns reported before running Bayesian regression. Final dataset included weighted means of all selected
+variables of interest. Below tabel describes the details of all variable in the data.
 
 1.  Response Variable (Binary, Diabetes) was defined as - "Is there one
     Dr you see for diabetes"
@@ -625,28 +257,30 @@ interest -
 3.  Covariates:
 
 -   Gender (factor, 2 levels): Male: Female
-
 -   Ethnicity (factor, 5 levels): Mexican American, Non-Hispanic, White
     Non-Hispanic, Black Other Hispanic, Other Race - Including
     Multi-Racial
-
 -   Age (num, continuous)
 
 ```{r message=FALSE, warning=FALSE}
 #| label: nhanes tables
 #| include: false
 
- # making subsets for each dataset  
-                       
+ # imported datasets 
                        nhanesTables('EXAM', 2013)
                        nhanesTables('QUESTIONNAIRE', 2013)
                        nhanesTables('DEMOGRAPHICS', 2013)
-                       
-                       
-nhanesCodebook("BMX_H")
-nhanesCodebook("SMQ_H")
-           
-  #  .xpt files read ( 2013–2014) 
+         
+                                     
+ # codebook for variable details
+
+nhanesCodebook("DEMO_H",'RIDRETH1')
+nhanesCodebook("DEMO_H",'RIAGENDR')
+nhanesCodebook("DEMO_H",'RIDAGEYR')
+nhanesCodebook("DIQ_H","DIQ240")
+nhanesCodebook("BMX_H",'BMDBMIC')
+
+  #  .xpt files read ( 2013–2014)                      
                       bmx_h <- nhanes("BMX_H")         #Exam
                       smq_h <- nhanes("SMQ_H")         #Quest
                       demo_h <- nhanes("DEMO_H")       #Demo
@@ -658,7 +292,7 @@ exam_sub <-   bmx_h  %>% select(SEQN, BMDBMIC)
 demo_sub <- demo_h %>% select(SEQN, RIDAGEYR, RIAGENDR, RIDRETH1, SDMVPSU, SDMVSTRA, WTMEC2YR)
 diq_sub <-  diq_h %>% select (SEQN, DIQ240)
 
-# Names of all variables selected for analysis
+# Names of all variables 
 names(exam_sub)
 names(demo_sub)
 names(diq_sub)
@@ -670,24 +304,14 @@ merged_data <- exam_sub %>%
 head(merged_data)
 
 
-nhanesCodebook("DEMO_H",'RIDRETH1')
-nhanesCodebook("DEMO_H",'RIAGENDR')
-nhanesCodebook("DEMO_H",'RIDAGEYR')
-nhanesCodebook("DIQ_H","DIQ240")
-nhanesCodebook("BMX_H",'BMDBMIC')
-
-
 ```
 
 ```{r}
 
-install.packages("gt")   
-library(gt)
+# formation of table with variable details
 
 variables <- c("SEQN", "BMDBMIC", "RIDAGEYR", "RIAGENDR", "RIDRETH1", 
                "SDMVPSU", "SDMVSTRA", "WTMEC2YR", "DIQ240")
-
-
 
 df <- data.frame(Variable = variables, Description = descriptions <- c("Respondent sequence number", 
         "BMI calculated as weight in kilograms divided by height in meters squared, and then rounded to one decimal place.", 
@@ -710,15 +334,14 @@ df %>%
 
 ```
 
-Weighted means and sd extracted from the datasets using library(survey)
-are reported and the final merged dataframe included 9813 observations.
+-   Using library(survey), weighted means and sd of all variables are
+    presented in the merged dataframe with 9813 observations.
 
 ```{r}
 #| label: weighted means
-#| include: false
+#| echo: true
 
-# weighted meand of each variable                       
-library(survey)
+# weighted means of each variable                       
 nhanes_design <- svydesign(
   id = ~SDMVPSU,
   strata = ~SDMVSTRA,
@@ -727,75 +350,55 @@ nhanes_design <- svydesign(
   nest = TRUE
 )
 
-# weighted mean of all variables
-svymean(~RIDAGEYR, design = nhanes_design, na.rm = TRUE)
-svymean(~SEQN, design = nhanes_design, na.rm = TRUE)
+svymean(~RIDAGEYR , design = nhanes_design, na.rm = TRUE)
 svymean(~BMDBMIC, design = nhanes_design, na.rm = TRUE)
 svymean(~RIAGENDR, design = nhanes_design, na.rm = TRUE)
 svymean(~RIDRETH1, design = nhanes_design, na.rm = TRUE)
 svymean(~DIQ240, design = nhanes_design, na.rm = TRUE)
 
-
-
 ```
 
-The unique categories, level, special codes and NAs of each variables
-were explored.
+## Raw Data Exploration and Visualization
+
+-   Statistical summary, visualizations (histogram, bar plot) of raw
+    data are presented Figure 4
+-   Most cases are non-hispanic whites.
+-   Of those who reported their diabetes status, shows more counts
+    reported having diabetes.
+-   Genders are relatively evenly distributed.
+-   Majority population were in the normal range of BMI
+-   Histograms (Figure 5) shows frequency distributions for age, with
+    slight right skewness.
+-   Breakdown of Missingness is presented in the graph.
 
 ```{r message=FALSE, warning=FALSE}
 #| label: merged dataframe
 #| echo: true
 
-library(DataExplorer)
-
 str(merged_data)
 plot_str(merged_data)
 introduce(merged_data)
 
-plot_intro(merged_data, title="Figure 1. Structure of variables and missing observations.")
-
-plot_missing(merged_data, title="Figure 2. Breakdown of missing observations.")
-
-plot_bar(merged_data, title = "Figure 3. Frequency plots of categorical variables.")
-
-plot_histogram(merged_data$RIDAGEYR, title = "Figure 4. Histogram plots of numerical variables.")
-
-plot_qq(merged_data$RIDAGEYR, title = "Figure 5. QQ plots to assess normality of numerical variables age.")
+plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
+plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
 
 
 ```
 
 ## Explain your data preprocessing and cleaning steps.
 
-Data Cleaning of the merged dataset revealed missing values (NA),
-special codes (7,9,77,99). Considering special codes are not random and
-cannot be dropped, based on the variable (codebook) they were
-transformed into NAs. All NAs were included in the analysis, since R
-automatically excludes rows with NA via listwise deletion or complete
-case analysis during regression.
-
-To explore missigness in the data, we conducted linear regression lm (),
-and listwise deletion of rows resulted in a reduced sample size (n=14),
-which could introduce bias as the informative missingness if ignored
-(MAR or MNAR). The regression resulted in quasi-separation (warning).
-
-## Raw Data Exploration and Visualization
-
--   We explored raw data and reported statistical summary,
-    visualizations (histogram for continuous variables), and bar plot
-    for categorical variables (BMI, gender, diabetes status, race)
-    Figure 4 revealed most cases are non-hispanic whites. Of those who
-    reported diabetes status, more counts reported having diabetes.
-    Genders are relatively evenly distributed. Majority population were
-    in the normal BMI range.
--   Histograms (Figure 5) shows age (continuous) frequency distributions
-    with slight right skewness.
--   Missigness is presented as a breakdon in the graph.
+Considering special codes are not random and cannot be dropped, they
+were transformed into NAs (based on the variable codebook). All NAs were
+included in the analysis, since, R automatically excludes rows with NA
+during during regression. We conducted linear regression lm (), and
+(listwise deletion or complete case analysis) resulted in a reduced
+sample size (n=14). We observed quasi-separation (warning) on our
+dataset. Since it could introduce bias as the informative missingness if
+ignored (MAR or MNAR)
 
 ```{r message=FALSE, warning=FALSE}
 #| label: missing values_final data
 #| include: false
-
 
 sum(is.na(merged_data$DIQ240))   # number of missing in DIQ240
 sum(is.na(merged_data$RIDAGEYR)) # number of missing in RIDAGEYR
@@ -810,13 +413,15 @@ sum(merged_data$BMDBMIC %in% missing_codes)
 sum(merged_data$RIAGENDR  %in% missing_codes)
 sum(merged_data$SEQN  %in% missing_codes)
 
-
 ```
+
+The results of the clean dataset with all NAs removed and the breakdown
+of the missingness (Graph)
 
 ```{r}
 #| include: false
 
-
+## filtering row with NAs (listwise deletion)
 clean_data <- merged_data %>% 
     filter(
     !is.na(DIQ240),
@@ -826,8 +431,6 @@ clean_data <- merged_data %>%
     !is.na(RIDRETH1),
     !is.na(SEQN)
      )
-
-## filtering ##  row filter listwise removal
 
 missing_codes <- c(7, 8, 9, 77, 88, 99, 777,999)     # checking special codes
 
@@ -843,7 +446,6 @@ sum(clean_data$race  %in% missing_codes)
 
 plot_intro(clean_data, title="Figure 6. Breakdown of missing observations.")
 
-
 ```
 
 The graph shows the data after removing all the NAs.
@@ -856,13 +458,12 @@ The graph shows the data after removing all the NAs.
 colSums(is.na(merged_data))
 colSums(is.na(clean_data))
 
-
 ```
 
-We then recoded variables in the merged data, special codes were
-included in NA category and the descriptive summary statistics presented
-in tabulated form for continuous and categorical variables include
-counts, frequencies, proportions mean and sd
+Because of small sample after NAs are removed we continue with the raw
+data. Descriptive statistics (counts, frequencies, proportions, mean and
+sd ). Visualization of each variable and the intervalriable proportions
+and between variable/s and outcome are presented here.
 
 ```{r}
 #| label: new columns
@@ -871,11 +472,9 @@ counts, frequencies, proportions mean and sd
 # cleaning of special characters(7,9,77,99) from merged_data (Raw data)
 
 special_codes <- c(7, 9, 77, 99)  
-
 cols_to_clean <- c("SEQN", "DIQ240","BMDBMIC","RIDAGEYR","RIAGENDR", "RIDRETH1", "SDMVPSU","SDMVSTRA", "WTMEC2YR")
 
 # Loop over columns
-
 for (v in cols_to_clean) {if (is.character(merged_data[[v]]) || is.factor(merged_data[[v]])) {
       merged_data[[v]][merged_data[[v]] %in% c("Don't know","Refused")] <- NA
     }
@@ -884,14 +483,11 @@ for (v in cols_to_clean) {if (is.character(merged_data[[v]]) || is.factor(merged
 summary(merged_data)  ## no removal of NAs in merged_data 
                       # NAs are handled in the model 
 
-
 ```
 
 ```{r}
-#| label: NAs
+#| label: rename
 #| include: false
-
-# NAs present in RIDAGEYR,DIQ240, BMDBMIC# 
 
 merged_data <- rename(merged_data,
        id = SEQN, # Respondent sequence number
@@ -905,21 +501,20 @@ merged_data <- rename(merged_data,
 ```
 
 ```{r}
-#| label: summry_raw data
+#| label: summary_raw data
 #| include: false
 
-
-library(dplyr)
-
-# 1. Response variable distribution
+# 1. Response variable distribution (diab)
 diab_summary <- merged_data %>%
   count(diab) %>%
-  mutate(Proportion = round(n / sum(n), 3)) %>%
+  mutate(proportion = round((n / sum(n)),3)) %>%
   rename(Category = diab, Count = n) %>%
   mutate(Variable = "Diabetes Status") %>%
-  select(Variable, Category, Count, Proportion)
+  select(Variable, Category, Count, proportion)
 
-# 2. Continuous predictors (example: age)
+diab_summary
+
+# 2. Continuous predictors (age)
 cont_summary <- merged_data %>%
   summarise(
     Mean = mean(age, na.rm = TRUE),
@@ -930,7 +525,7 @@ cont_summary <- merged_data %>%
   mutate(Variable = "Age") %>%
   select(Variable, everything())
 
-# 3. Function for categorical variables
+# 3. categorical variables (BMI_cat, gender, race)
 cat_summary <- function(df, var, name) {
   df %>%
     count({{var}}) %>%
@@ -943,6 +538,7 @@ cat_summary <- function(df, var, name) {
 gender_summary <- cat_summary(merged_data, gender, "Gender")
 BMI_summary    <- cat_summary(merged_data, BMI_cat, "BMI Category")
 race_summary   <- cat_summary(merged_data, race, "Race")
+diab_summar    <- cat_summary(merged_data, diab, "Diabetes")
 
 # 4. Combine all into one table
 final_table <- bind_rows(
@@ -953,66 +549,77 @@ final_table <- bind_rows(
   race_summary
 )
 
+ diab_perc <- merged_data %>%
+  group_by(diab) %>%
+  summarise(n = n()) %>%
+  mutate(percent = n / sum(n) * 100)
+
+ gender_perc <- merged_data %>%
+  group_by(gender) %>%
+  summarise(n = n()) %>%
+  mutate(percent = n / sum(n) * 100)
+
+ race_perc <- merged_data %>%
+  group_by(race) %>%
+  summarise(n = n()) %>%
+  mutate(percent = n / sum(n) * 100)
+
+ BMI_cat_perc <- merged_data %>%
+  group_by(BMI_cat) %>%
+  summarise(n = n()) %>%
+  mutate(percent = n / sum(n) * 100)
+
+final_table2 <- bind_rows(
+  diab_perc,
+  gender_perc,
+  BMI_cat_perc,
+  race_perc
+)
+final_table2
 
 ```
 
 ```{r}
-#| label: crosstabulation and raw data summary
+#| label: crosstabulation and table summary (raw)
 
-# corss-tabulation #
+# cross-tabulation #
+tab1 <- table(merged_data$diab, merged_data$BMI_cat,useNA="ifany")
+prop.table(tab1) * 100
+tab2<-table(merged_data$race, merged_data$diab, useNA="ifany")# before cleaning and imputation
+prop.table(tab2) * 100
+tab3 <- table(merged_data$gender, merged_data$diab, useNA="ifany")
+prop.table(tab3) * 100
 
-table(merged_data$diab, merged_data$BMI_cat,useNA="ifany")
-table(merged_data$race, merged_data$diab, useNA="ifany") # before cleaning and imputation
-table(merged_data$gender, merged_data$diab, useNA="ifany")
+# Create a combined table of counts and percentages
+vars <- c("BMI_cat", "race", "gender")
+percent_table <- merged_data %>%
+  select(all_of(vars), diab) %>%
+  pivot_longer(cols = all_of(vars), names_to = "Variable", values_to = "Category") %>%
+  group_by(Variable, Category, diab) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Variable, Category) %>%
+  mutate(Percent = round(100 * Count / sum(Count), 1)) %>%
+  ungroup()
 
-# Print with title
+# Fancy Tables #
+kable(percent_table, caption = "Table 2. Percentage based on categories of Variables")
 kable(final_table, caption = "Table 1. Descriptive Statistics of Study Variables")
+
 ```
 
+Visualization of the data -Bar plot of individual variables. -Box plot
+for cross-tabulation results (Diabetes status vs individual variables-
+age , gender, race and BMI) -Higher proportion of \< 20 years age
+reported being Mexican American
+
 ```{r}
-#| label: Raw Data Vizualization
+#| label: Data Vizualization of variables and cross-tabulation (raw)
 #| 
-# load a libraries
-library(knitr) # fancy table
-library(tidyverse) # load library tidyverse
-library(classpackage)
-library(ggplot2)
-library(dplyr)
+## Bar plot of age, gender, race, diabetes status, BMI ## 
 
+plot_bar(merged_data, title = "Figure 3(Merged dataset). Frequency plots of categorical variables.")
 
-
-# Age distribution
-ggplot(merged_data, aes(x = age)) +
-  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
-  theme_minimal() +
-  labs(title = "Age Distribution", x = "Age (years)", y = "Count")
-
-# BMI category
-ggplot(merged_data, aes(x = BMI_cat)) +
-  geom_bar(fill = "salmon") +
-  theme_minimal() +
-  labs(title = "BMI Category Distribution", x = "BMI Category", y = "Count")
-
-# Race category
-ggplot(merged_data, aes(x = race)) +
-  geom_bar(fill = "salmon") +
-  theme_minimal() +
-  labs(title = "Race Category Distribution", x = "Race Category", y = "Count")
-
-# Gender
-ggplot(merged_data, aes(x = gender)) +
-  geom_bar(fill = "lightgreen") +
-  theme_minimal() +
-  labs(title = "Gender Distribution", x = "Gender", y = "Count")
-
-# Outcome
-ggplot(merged_data, aes(x = factor(diab))) +
-  geom_bar(fill = "purple") +
-  theme_minimal() +
-  labs(title = "Diabetes Status (DIQ240)", x = "Diabetes (2 = No, 1 = Yes)", y = "Count")
-
-
-# Cross - tabulation #
+# Visualization Cross-Tabulation #
 
 # DIQ240 by Age #
 ggplot(merged_data, aes(x = age , y = factor(diab))) +
@@ -1020,10 +627,8 @@ ggplot(merged_data, aes(x = age , y = factor(diab))) +
   theme_minimal() +
   labs(title = "Age by Diabetes Status", x = "Age", y = "Diabetes (2 = No, 1 = Yes)" )
 
-
 #  DIQ240 by BMI  #
 
-## ALL NAs ## 
 ggplot(merged_data, aes(x = BMI_cat  , fill = factor(diab))) +
   geom_bar(position = "fill") +
   theme_minimal() +
@@ -1043,66 +648,105 @@ ggplot(merged_data, aes(x = gender, fill = factor(diab)  )) +
   theme_minimal() +
   labs(title = "Diabetes by gender ", x = "gender ", y = "Proportion", fill = "diab")
 
-
 ggplot(merged_data) + 
     geom_point(aes(x = merged_data$age,  y = merged_data$diab), 
                na.rm = TRUE,
                show.legend = TRUE,
                position = "jitter") 
 
+ggplot(merged_data) + 
+    geom_point(aes(x = merged_data$race,  y = merged_data$BMI_cat), 
+               na.rm = TRUE,
+               show.legend = TRUE,
+               position = "jitter") 
 
+ggplot(merged_data %>% filter(age < 20), aes(x = race, y = BMI_cat, color = age)) +
+  geom_jitter(alpha = 0.6, width = 0.2, height = 0.2, na.rm = TRUE) +
+  labs(x = "Race", y = "BMI Category", color = "Age") +
+  theme_minimal()
+
+
+# Plots of cross tabulation between variables # 
+
+# gender vs race 
 ggplot(merged_data) +
     geom_bar(aes(x = gender, fill = race))
 
+# gender vs BMI_cat
+ggplot(merged_data) +
+    geom_bar(aes(x = gender, fill = BMI_cat))
 
+#  race vs BMI_cat
+ggplot(merged_data) +
+    geom_bar(aes(x = race, fill = BMI_cat))
+
+# line graph for age 
 ggplot(merged_data) + 
     geom_freqpoly(aes(x = age), binwidth = 5, na.rm = TRUE)  # age distribution#
+
+#  race vs age
+ggplot(merged_data)+ 
+    geom_bar(aes(x = age , fill = race))
+
+ggplot(merged_data %>% filter(age < 20)) +
+  geom_bar(aes(x = age, fill = race), na.rm = TRUE) +
+  labs(x = "Age (<20)", y = "Count", fill = "Race") +
+  theme_minimal()
+
 ```
 
-**Multiple logistic regression**
+Frequentist method
 
-We conducted Multiple linear regression on raw dataset. After complete
-case analysis, listwise deletion of NAs, resulted in small sample size
-(presented are first 6 deleted rows)., with perfect (or quasi-perfect)
-separation. @van2012flexible.
+(1) **Multiple logistic regression**
 
-We exlored the cause of missingness, revealing that the cause of
-missingness (MAR and MNAR) are found common in healthcare and public
-health datasets (plot below shows missingness)
+-   Multiple linear regression on raw dataset, resulted in small sample
+    size (complete case analysis and listwise deletion of NAs):
+    (presented are first 6 deleted rows)
+-   The data resulted in quasi-separation. @van2012flexible.
+-   Explored of the cause of missingness, revealed missing at random and
+    missing not at random (MAR and MNAR) whic as reported previously are
+    common in healthcare and public health datasets: (plot on
+    missingness - see below)
 
-**Firth (penalized) regression**
+(2) **Baseline regression model** (Only BMI to predict diabetes)
 
-Firth regression, a frquestist approach use Jeffreys prior for bias
-correction. It does not provide posterior and no sampling using MCMC (as
-in contrast to bayesian logisitic regression). Firth (penalized)
-regression was considered to handle quasi-separation, @DAngelo2025.
+-   We conducted baseline model regression to know whether predictors
+    significantly improve predictive power.
+-   Null deviance = 16.75 (baseline fit).
+-   Residual deviance = 15.11 (with BMI).
+-   presents that the drop is small and that BMI category adds very
+    little predictive value over just assuming the overall diabetes
+    prevalence.
+
+(3) **Firth (penalized) regression**
+
+Firth (penalized) regression was considered to handle quasi-separation,
+@DAngelo2025. Firth regression, a frquentist approach that use Jeffreys
+prior for bias correction. It does not provide posterior and no sampling
+using MCMC (vs) bayesian logisitic regression.
+
+Below are the summaries from the MLR (raw data), Baseline model
+regression, Firth regression
 
 ```{r}
 #| label: MLR (with missingness)
 
-
+# MLR # and # quasi-complete separation #
 m_raw<- glm(diab ~ BMI_cat + age + gender + race,
                        family = binomial, data = merged_data)  
+summary(m_raw)
 
- # quasi-complete separation #
-
-m_raw
-plot(m_raw)
-head(na.action(m_raw))
-
-
-library(logistf) # penalized regression #
+# Baseline Model - regression # 
+m_raw1<- glm(diab ~ BMI_cat,
+                       family = binomial, data = merged_data)  
+summary(m_raw1)
 
 # Firth logistic regression
+library(logistf) # penalized regression #
+
 m_firth <- logistf(diab ~ BMI_cat + age + gender + race,
                    data = merged_data)
-
-# Summary of results
 summary(m_firth)
-
-# Odds ratios and 95% CIs
-exp(coef(m_firth))
-exp(confint(m_firth))
 
 
 ```
@@ -1117,12 +761,60 @@ m02<- glm(diab ~ BMI_cat + age,
                        family = binomial, data = merged_data, na.action=na.omit)
 m03<- glm(diab ~ BMI_cat + race, 
                        family = binomial, data = merged_data, na.action=na.omit)
+m04<- glm(diab ~ BMI_cat + race + gender,
+                       family = binomial, data = merged_data, na.action=na.omit)
+
+m01
+m02
+m03
+m04
+
 ```
 
 ```{python}
+#| label: Python
+#| eval: false
+#| include: false
+
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+demo1=pd.read_csv("data/demographic.csv")
+exam1=pd.read_csv("data/examination.csv")
+quest1=pd.read_csv("data/questionnaire.csv")
+demo1.head()
+exam1.head()
+quest1.head()
+
+demo1.shape
+exam1.shape
+quest1.shape
+
+demo1.dtypes
+demo1.info()
+demo1.columns
+demo1.RIAGENDR.unique()
+
+include =['object', 'float', 'int'] 
+demo1.describe(include=include)
+
+demo1.isnull().sum()
+demo1.RIAGENDR.value_counts()
+
+quest1.DIQ240.value_counts()
+quest1.DIQ240.value_counts(normalize=True).mul(100).round(1).astype(str) + '%'
 
 
+quest1["DIQ240"].hist(figsize=(10, 5))
+plt.show()
+
+demo1["RIAGENDR"].hist(figsize=(10, 5))
+plt.show()
+
+demo1["RIDAGEYR"].hist(figsize=(10, 5))
+plt.show()
 
 
 
@@ -1131,13 +823,11 @@ import pandas as pd
 
 ## Analysis and Results
 
-## Unexpected reports, patterns or anomalies in raw **data**
+## Unexpected reports, patterns or anomalies in the raw data
 
-**Linear regression and challenges of raw data**
-
--   We found quasi-complete separation in the raw data (9799
-    observations dropped)
--   Reduced sample size with less number of complete cases (n=14).
+-   Issue of quasi-complete separation in the data (9799 observations
+    dropped)
+-   Reduced sample size with reduced number of complete cases (n=14).
 -   The model is overfitted to this subset and cannot be generalized.
 -   Huge coefficients (e.g., 94, –50, 73) and the tiny residual deviance
     suggest perfect separation and sparse data in some categories with
@@ -1145,40 +835,50 @@ import pandas as pd
     few cases of 0 or 1).
 -   Logistic regression cannot estimate stable coefficients when
     predictors perfectly classify the outcome.
+-   Firth regression dealt with quasi-separation with coefficients as
+    finite, but the sample size was reduced (n= 14) where estimates are
+    highly uncertain, wide confidence intervals → cannot make strong
+    claims about predictor effects.
 
-**Firth regression (raw data) handled** quasi-separation with
-coefficients as finite, but the sample size was reduced (n= 14) where
-estimates are highly uncertain, wide confidence intervals → cannot make
-strong claims about predictor effects.
+**Interpretation Across Models with only 14 non-missing cases** - could
+not be trusted because of small sample size and the separation problem -
+Models with all predictors together and with sequential adding of
+predictors, all models showed unstable and extreme estimates with
+standard errors not meaningful. - Adding more predictors makes the
+deviance drop but indicated overfitting / separation, not true
+explanatory power. - BMI alone contributes very little - Race and gender
+make models appear stronger, but was based on small sample (n=14) and
+shows a case of complete separation, not generalizable evidence.
 
-**Multivariate Imputation by Chained Equations (MICE)** @JSSv045i03
+We decided to perform imputation, to retain full N = \~9813 to deal with
+small sample size and avoid quasi-separation.
 
-To avoid sample loss and potential bias in subsequent analyses, we
-considered multiple imputation (MI) as an alternative approach for the
-given raw dataset. Flatness of the density, heavy tails, non-zero
-peakedness, skewness and multimodality do not hamper the good
-performance of multiple imputation for the mean structure in samples n
-\> 400, even for high percentages (75%) of missing data in one variable
-\@@van2012flexible. Multiple Imputation (MI) is a Bayesian Approach (use
-popular mice package in R) and adds sampling variability to the
-imputations. Iterative Imputation (MICE) imputes missing values of one
-variable at a time, using regression models based on the other variables
-in the dataset. This is a chain process, with each imputed variable
-becoming a predictor for the subsequent imputation and the entire
-process is repeated multiple times to create several complete datasets,
-each reflecting different possibilities for the missing data. Each
-variable is imputed using its own appropriate univariate regression
-model.
+**Multivariate Imputation by Chained Equations (MICE)** @JSSv045i03 -
+Bayesian Approach
 
-We performed Multivariate Imputation by Chained Equations (MICE) to
-handle missingness in the predictor (BMI) and in the response variable
-(diabetes status).
+-   Multiple imputation (MI) is considered as an alternative approach
+    for the given raw dataset. Flatness of the density, heavy tails,
+    non-zero peakedness, skewness and multimodality do not hamper the
+    good performance of multiple imputation for the mean structure in
+    samples n \> 400 even for high percentages (75%) of missing data in
+    one variable \@@van2012flexible.
+-   Multiple Imputation (MI) is a Bayesian Approach (use popular mice
+    package in R) and adds sampling variability to the imputations.
+-   Iterative Imputation (MICE) imputes missing values of one variable
+    at a time, using regression models based on the other variables in
+    the dataset.
+-   This is a chain process, with each imputed variable becoming a
+    predictor for the subsequent imputation and the entire process is
+    repeated multiple times to create several complete datasets, each
+    reflecting different possibilities for the missing data.
+-   Each variable is imputed using its own appropriate univariate
+    regression model.
 
 **Results from MICE:**
 
--   MI on raw data resulted in filling imputed values with resulting
-    9813 observations with no NAs. A comparative bar plot on missingness
-    in the raw data and the imputed data is presented below.
+-   MI resulted in filling imputed values with resulting 9813
+    observations with no NAs. A comparative bar plot on missingness in
+    the raw data and the imputed data is presented below.
 
 -   A heatmap of the imputed dataset generated a correlation between
     **BMI categories** and **Diabetes status.** BMI dummy variables are
@@ -1230,6 +930,8 @@ marginplot(
 # Checking missingness in imputed data
 
 summary(Imputed_data1)
+
+summary (merged_data)
 colSums(is.na(Imputed_data1))  # check total missing values
 
 plot_intro(Imputed_data1, title="Figure 8. Structure of variables and missing observations.")
@@ -1252,9 +954,63 @@ print(tab)
 
 # Chi-square test of independence
 chisq.test(tab)
+
+ggplot(Imputed_data1, aes(x = diab)) + 
+  geom_bar()
+
+glimpse(Imputed_data1)
+
+
+# diab within BMI categories
+breakdown_BMI_cat <- Imputed_data1 %>%
+  group_by(BMI_cat, diab) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(BMI_cat) %>%
+  mutate(
+    Percent = round(100 * Count / sum(Count), 1)
+  )
+
+breakdown_BMI_cat
+
+
+ggplot(breakdown_BMI_cat, aes(x = BMI_cat, y = Percent, fill = diab)) +
+  geom_col(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Relative Breakdown of Diabetes by BMI Category",
+    x = "BMI Category", y = "Proportion"
+  ) +
+  theme_minimal()
+
+
+Imputed_data1 %>% 
+  tabyl(diab, BMI_cat) %>% 
+  adorn_percentages("col")
 ```
 
-## Modeling 
+## Modeling
+
+```{r}
+#| label: Imputed_data1 EDA
+
+table(Imputed_data1$BMI_cat, Imputed_data1$diab)
+table(merged_data$BMI_cat, merged_data$diab)
+
+
+ggplot(Imputed_data1, aes(x = BMI_cat, fill = diab)) +
+  geom_bar(position = "fill") +
+  labs(y = "Proportion", title = "BMI Category vs Diabetes")
+
+
+ggplot(Imputed_data1, aes(x = age, fill = diab)) +
+  geom_histogram(binwidth = 5, position = "fill") +
+  labs(y = "Proportion", title = "Age distribution by Diabetes")
+
+ggplot(merged_data, aes(x = age, fill = diab)) +
+  geom_histogram(binwidth = 5, position = "fill") +
+  labs(y = "Proportion", title = "Age distribution by Diabetes")
+
+```
 
 Bayesian data augmentation and Logistic regression @Austin2021
 
@@ -1301,36 +1057,36 @@ $$ \text{logit}(P(Y_i=1)) = \beta_0 + \beta_1 \cdot Age_i + \beta_2 \cdot BMI_i 
 
 $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$
 
-**Comparision of multiple imputation and Bayesian data augmentation**
+**Comparison of multiple imputation and Bayesian data augmentation**
 
-+---------------------------+---------------------------------------+
-| **Multiple imputation**   | **Bayesian data augmentation**        |
-+===========================+=======================================+
-| -   frequentist approach  | -   performs missing data imputation  |
-|     and requires no       |     and regression model fitting      |
-|     priors, and has       |     simultaneously                    |
-|     moderate flexibility  |                                       |
-|                           | -   Markov Chain Monte Carlo (MCMC)   |
-|                           |     draws samples from the joint      |
-|                           |     posterior of regression           |
-|                           |     parameters, missing values and    |
-|                           |     provide complete datasets by      |
-|                           |     extracting posterior means,       |
-|                           |     credible intervals, and           |
-|                           |     probabilities                     |
-+---------------------------+---------------------------------------+
-| -   handles missing       | -   performed on the data with        |
-|     values first by       |     missingness                       |
-|     imputation, performs  |                                       |
-|     regression analysis,  | -   shrink extreme estimates back     |
-|     pools results         |     toward plausible values           |
-+---------------------------+---------------------------------------+
-| -   propagate uncertainty | -   handles uncertainty in missing    |
-|     added after analysis  |     values fully propagated through   |
-|     (pooling).            |     the model, naturally handles      |
-|                           |     small or sparse datasets and      |
-|                           |     separation problems.              |
-+---------------------------+---------------------------------------+
++--------------------------+--------------------------------------+
+| **Multiple imputation**  | **Bayesian data augmentation**       |
++==========================+======================================+
+| -   frequentist approach | -   performs missing data imputation |
+|     and requires no      |     and regression model fitting     |
+|     priors, and has      |     simultaneously                   |
+|     moderate flexibility |                                      |
+|                          | -   Markov Chain Monte Carlo (MCMC)  |
+|                          |     draws samples from the joint     |
+|                          |     posterior of regression          |
+|                          |     parameters, missing values and   |
+|                          |     provide complete datasets by     |
+|                          |     extracting posterior means,      |
+|                          |     credible intervals, and          |
+|                          |     probabilities                    |
++--------------------------+--------------------------------------+
+| -   handles missing      | -   performed on the data with       |
+|     values first by      |     missingness                      |
+|     imputation, performs |                                      |
+|     regression analysis, | -   shrink extreme estimates back    |
+|     pools results        |     toward plausible values          |
++--------------------------+--------------------------------------+
+| -   propagate            | -   handles uncertainty in missing   |
+|     uncertainty added    |     values fully propagated through  |
+|     after analysis       |     the model, naturally handles     |
+|     (pooling).           |     small or sparse datasets and     |
+|                          |     separation problems.             |
++--------------------------+--------------------------------------+
 
 **Diagnostics performed before regression analysis**
 
@@ -1339,57 +1095,70 @@ $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$
 (3) Model plot
 
 ```{r}
-#| label: MLR assumptions
+#| label: MLR and assumptions
 #| echo: true
 
 # MLR on imputed data
 # assumption check (# for correlation # )
 # correlation matrix
 
-m_imp1 <- glm(diab ~ age + gender + race + BMI_cat,
+m_imp <- glm(diab ~ age + gender + race + BMI_cat,
           data = Imputed_data1, 
-          family = binomial)
-m_imp1
+          family = binomial)                     ## frequentist model ##
+m_imp
 
-# Get the predicted logit
-Imputed_data1$logit <- predict(m_imp1, type = "link")  # 'link' gives log-odds
+m_raw
 
-# Plot BMI vs logit
+m_firth
 
-plot_imp1 <- ggplot(Imputed_data1, aes(x = age, y = logit)) +
+
+# To predict log-odds odds of diabetes
+Imputed_data1$logit <- predict(m_imp, type = "link")  # 'link' gives log-odds
+
+# Plot BMI vs logit (# prediction of diabetes - log-odds at individi=ual level ##)
+
+
+Imputed_data1$prob <- exp(Imputed_data1$logit) / (1 + exp(Imputed_data1$logit))
+ggplot(Imputed_data1, aes(x = age, y = prob)) +
   geom_point(alpha = 0.3) +
   geom_smooth(method = "loess") +
-  labs(x = "RIDAGEYR", y = "Log-odds of Diabetes")
+  labs(x = "Age", y = "Predicted Probability of Diabetes")
 
- plot_imp1  
   
  
 # Calculate fitted values and residuals from the final model
-    fitted_imputed1 <- fitted(m_imp1)
-    residual_imputed1 <- residuals(m_imp1)
+    fitted_imputed1 <- fitted(m_imp)
+    residual_imputed1 <- residuals(m_imp)
   
+    # Example: fitted vs residuals plot
+plot(fitted(m_imp), residuals(m_imp),
+     xlab = "Fitted probabilities",
+     ylab = "Residuals",
+     main = "Residuals vs Fitted")
+abline(h = 0, col = "red", lty = 2)  # reference line at 0
 
-#Implication for modeling:
+
+
 
 # collinearity check #
 
 library(car)
-    vif(m_imp1)  # VIF > 5 or 10 indicates multicollinearity 
+    vif(m_imp)  # VIF > 5 or 10 indicates multicollinearity 
 
 # Check for influential points and outliers # 
 library(broom)
-    influence_m_imp1 <- broom::augment(m_imp1)
-    influence_m_imp1
+    influence_m_imp <- broom::augment(m_imp)
+    influence_m_imp
 
     Imputed_data1 <- Imputed_data1 %>%
-    mutate(outlier =  if_else(abs(rstandard(m_imp1))>2.5, "Suspected", "Not Suspected"))
+    mutate(outlier =  if_else(abs(rstandard(m_imp))>2.5, "Suspected", "Not Suspected"))
 
     Imputed_data1 %>% count(outlier)
 
-    cooks(m_imp1)
+    cooks(m_imp)
 
 # Visualization 
-ggplot(influence_m_imp1, aes(x = .hat, y = .cooksd)) +
+ggplot(influence_m_imp, aes(x = .hat, y = .cooksd)) +
   geom_point() +
   labs(x = "Leverage", y = "Cook's Distance")
 
@@ -1404,17 +1173,17 @@ Imputed_data1 %>% ggplot(aes(x = BMI_cat, y = diab, color = outlier)) +
 Imputed_data1$diab_num <- ifelse(Imputed_data1$diab == "Yes", 1, 0)
 
 library(ResourceSelection)
-hoslem.test(Imputed_data1$diab_num, fitted(m_imp1))
-summary(m_imp1)
+hoslem.test(Imputed_data1$diab_num, fitted(m_imp))
+summary(m_imp)
 
 
-anova (m_imp1)
+anova (m_imp)
 library(glmtoolbox)
-(adjR2(m_imp1))
+(adjR2(m_imp))
 
 # plot- m_raw and m3 # residual vs fitted #
 
-plot3 <- plot(m_imp1$fitted.values, resid(m_imp1),   ## residual vs fitted plot - imputed data ##
+plot3 <- plot(m_imp$fitted.values, resid(m_imp),   ## residual vs fitted plot - imputed data ##
      xlab = "Fitted values",
      ylab = "Residuals",
      main = "Residuals vs Fitted",
@@ -1478,7 +1247,7 @@ For males, the informative prior @Ali2024, we use is
 Normal(μ = 1.705, σ² = 0.448²).
 
 ```{r}
-#| label: m_raw vs m_imp1
+#| label: m_raw vs m_imp
 #| eval: false
 #| include: false
 
@@ -1487,24 +1256,44 @@ m_raw <- glm(diab ~ age + BMI_cat + race + gender                               
     family = binomial, data = merged_data)
 
 # Model (classic, imputed data)
-m_imp1 <- glm(diab ~ age + BMI_cat + race + gender                                   , 
+m_imp <- glm(diab ~ age + BMI_cat + race + gender                                   , 
     family = binomial, data = Imputed_data1)
 
-print(m_imp1)
-
-
-m_raw
-m_imp1
-m3
 
 anova(m_raw)
-anova(m_imp1)
+anova(m_imp)
 
 adjR2(m_raw)
-adjR2(m_imp1)
+adjR2(m_imp)
 
  # Q-Q Plot
-      qqPlot(residual_imputed1, main = "Figure 13. Q-Q Plot of Residuals")
+      qqPlot(residual_imputed, main = "Figure 13. Q-Q Plot of Residuals")
+      
+ # compare plots of imputed and raw data
+
+# Imputed data
+ 
+  
+  Imputed_data1 <- Imputed_data1 %>%
+  mutate(pred_prob_imputed = predict(m_imp, type = "response"))  # probabilities
+
+# Raw data 
+
+merged_data <- merged_data %>%
+  mutate(pred_prob_raw = predict(m_raw, type = "response"))  # probabilities
+     
+    
+Imputed_plot <- Imputed_data1 %>% select(BMI_cat, pred_prob_imputed) %>% mutate(Source = "Imputed")
+Raw_plot <- merged_data %>% select(BMI_cat, pred_prob_raw) %>% mutate(Source = "Raw")
+
+# Rename probability column to common name
+Imputed_plot <- Imputed_plot %>% rename(Pred_Prob = pred_prob_imputed)
+Raw_plot <- Raw_plot %>% rename(Pred_Prob = pred_prob_raw)
+
+# Combine
+plot_data <- bind_rows(Imputed_plot, Raw_plot)
+
+plot(Imputed_plot) 
 ```
 
 In m1 = race is a significant predictor
