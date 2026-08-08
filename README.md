@@ -26,8 +26,6 @@ We compare estimates across frameworks and report diagnostics such as convergenc
     -   `adapt_delta = 0.95`
     -   Normalized exam weights used as importance weights
 
-> **Note:** Firth penalized logistic regression was explored earlier but removed from the final report for consistency with the Quarto workflow.
-
 ------------------------------------------------------------------------
 
 ## Model Equation
