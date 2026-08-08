@@ -40,11 +40,9 @@ Age and BMI are standardized (z-scores). Reference categories are **Male** and *
 
 ------------------------------------------------------------------------
 
-## Results Summary
+## Results Summary includes
 
-The report includes:
-
--   Odds ratios (per 1 SD) for Age and BMI
+-   Odds ratios 
 -   Comparison of survey-weighted vs Bayesian effect estimates
 -   Posterior summaries and convergence diagnostics
 -   Bayesian (R\^2)
